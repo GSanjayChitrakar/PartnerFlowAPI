@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace YourNamespace.Entities
 {
@@ -110,9 +111,9 @@ namespace YourNamespace.Entities
         public string? vcLifeAsiaClientId { get; set; }
 
         public DateTime? dtClientIDGeneratedOn { get; set; }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime SysStartTime { get; set; }
-
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime SysEndTime { get; set; } = DateTime.Parse("9999-12-31 23:59:59");
 
         [StringLength(100)]

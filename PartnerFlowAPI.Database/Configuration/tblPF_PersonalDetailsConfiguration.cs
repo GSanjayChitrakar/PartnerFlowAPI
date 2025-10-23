@@ -40,10 +40,8 @@ namespace YourNamespace.Configurations
                    .IsUnicode()
                    .IsRequired(false);
 
-            builder.Property(e => e.vcCompanyName)
-                   .HasMaxLength(200)
-                   .IsUnicode()
-                   .IsRequired(false);
+            builder.Property(e => e.vcCompanyName);
+                   
 
             builder.Property(e => e.vcFirstName)
                    .HasMaxLength(510)

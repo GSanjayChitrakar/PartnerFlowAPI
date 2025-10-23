@@ -2280,151 +2280,167 @@ namespace PartnerFlowAPI.Services.Implementation
             var result = new ValidationResultModel();
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
-            var allowedFields = await _context.PartnerSections
-                .Where(ps => ps.PartnerId == partnerId)
-                .Join(
-                    _context.SectionFields.Include(sf => sf.Field),
-                    ps => ps.SectionId,
-                    sf => sf.SectionId,
-                    (ps, sf) => sf.Field
-                )
-                .Where(f => !f.IsDeleted)
-                .Select(f => new FieldDefinition
-                {
-                    FieldName = f.FieldName,
-                    DataType = f.DataType,
-                    Length = f.Length
-                })
-                .Distinct()
-                .ToListAsync();
-
-            var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
-
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
-            var normalizedPayload = payload.ToDictionary(
-                kvp => kvp.Key,
-                kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
-            );
-
-            // 3️⃣ Detect if nested JSON exists
-            bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
-
-            JObject dataObject = hasNestedObject
-                ? FlattenJson(JObject.FromObject(normalizedPayload))
-                : JObject.FromObject(normalizedPayload);
-
-            // 4️⃣ Validate each field
-            foreach (var prop in dataObject.Properties())
+            try
             {
-                var key = prop.Name.ToLower();
-                var value = prop.Value?.Type == JTokenType.Null ? null : prop.Value?.ToString();
+                // 1️⃣ Get allowed fields for this partner
+                var allowedFields = await _context.PartnerSections
+                    .Where(ps => ps.PartnerId == partnerId)
+                    .Join(
+                        _context.SectionFields.Include(sf => sf.Field),
+                        ps => ps.SectionId,
+                        sf => sf.SectionId,
+                        (ps, sf) => sf.Field
+                    )
+                    .Where(f => !f.IsDeleted)
+                    .Select(f => new FieldDefinition
+                    {
+                        FieldName = f.FieldName,
+                        DataType = f.DataType,
+                        Length = f.Length
+                    })
+                    .Distinct()
+                    .ToListAsync();
 
-                if (!fieldDict.ContainsKey(key))
+                var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
+
+                // 2️⃣ Normalize payload
+                var normalizedPayload = payload.ToDictionary(
+                    kvp => kvp.Key,
+                    kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
+                );
+
+                // 3️⃣ Flatten JSON
+                bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
+                JObject dataObject = hasNestedObject
+                    ? FlattenJson(JObject.FromObject(normalizedPayload))
+                    : JObject.FromObject(normalizedPayload);
+
+                // 4️⃣ Validate fields
+                foreach (var prop in dataObject.Properties())
                 {
-                    invalidFields.Add($"{prop.Name} (Field Not Configured)");
-                    continue;
+                    var key = prop.Name.ToLower();
+                    var value = prop.Value?.Type == JTokenType.Null ? null : prop.Value?.ToString();
+
+                    if (!fieldDict.ContainsKey(key))
+                    {
+                        invalidFields.Add($"{prop.Name} (Field Not Configured)");
+                        continue;
+                    }
+
+                    var field = fieldDict[key];
+
+                    if (!IsValidDataType(value, field.DataType))
+                    {
+                        invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
+                        continue;
+                    }
+
+                    if (field.Length.HasValue && value?.Length > field.Length)
+                    {
+                        invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
+                    }
                 }
 
-                var field = fieldDict[key];
+                result.InvalidFields = invalidFields;
+                result.Success = invalidFields.Count == 0;
 
-                // Validate datatype
-                if (!IsValidDataType(value, field.DataType))
+                var partnerData = await _context.tblPartnerDatas
+                                        .Where(p => p.PartnerID == partnerId && !p.IsDeleted)
+                                        .Select(p => new { p.ApplicationNumber })
+                                        .FirstOrDefaultAsync();
+
+                if (partnerData == null || string.IsNullOrEmpty(partnerData.ApplicationNumber))
                 {
-                    invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
-                    continue;
+                    result.Success = false;
+                    result.InvalidFields.Add("ApplicationNumber (Not Found for given PartnerId)");
+                    return result;
                 }
 
-                // Validate length
-                if (field.Length.HasValue && value?.Length > field.Length)
+                if (result.Success)
                 {
-                    invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
+                    var entity = new tblPF_NomineeDetails();
+
+                    try
+                    {
+                        // Dynamically assign each property to detect null/invalid errors
+                        entity.intAssureType = ParseInt(GetValueIgnoreCase(dataObject, "intAssureType"));
+                        entity.intFamilyDetailsId = ParseInt(GetValueIgnoreCase(dataObject, "intFamilyDetailsId"));
+                        entity.vcRelation = GetValueIgnoreCase(dataObject, "vcRelation");
+                        entity.vcApplicationNumber = partnerData.ApplicationNumber;
+                        entity.vcTitle = GetValueIgnoreCase(dataObject, "vcTitle");
+                        entity.vcFirstName = GetValueIgnoreCase(dataObject, "vcFirstName") ?? string.Empty;
+                        entity.vcMiddleName = GetValueIgnoreCase(dataObject, "vcMiddleName");
+                        entity.vcLastName = GetValueIgnoreCase(dataObject, "vcLastName");
+                        entity.dtDOB = ParseDate(GetValueIgnoreCase(dataObject, "dtDOB"));
+                        entity.chGender = GetValueIgnoreCase(dataObject, "chGender");
+                        entity.dcAnnualIncome = ParseDecimal(GetValueIgnoreCase(dataObject, "dcAnnualIncome"));
+                        entity.vcMobileNumber = GetValueIgnoreCase(dataObject, "vcMobileNumber");
+                        entity.ftNomineePercentage = ParseDouble(GetValueIgnoreCase(dataObject, "ftNomineePercentage"));
+                        entity.vcOccupation = GetValueIgnoreCase(dataObject, "vcOccupation");
+                        entity.btIsAppointee = ParseBool(GetValueIgnoreCase(dataObject, "btIsAppointee"));
+                        entity.vcAppointeeRelation = GetValueIgnoreCase(dataObject, "vcAppointeeRelation");
+                        entity.vcAppointeeTile = GetValueIgnoreCase(dataObject, "vcAppointeeTile");
+                        entity.vcAppointeeFirstName = GetValueIgnoreCase(dataObject, "vcAppointeeFirstName");
+                        entity.vcAppointeeMiddleName = GetValueIgnoreCase(dataObject, "vcAppointeeMiddleName");
+                        entity.vcAppointeeLastName = GetValueIgnoreCase(dataObject, "vcAppointeeLastName");
+                        entity.vcAppointeeDob = ParseDate(GetValueIgnoreCase(dataObject, "vcAppointeeDob"));
+                        entity.chAppointeeGender = GetValueIgnoreCase(dataObject, "chAppointeeGender");
+                        entity.vcAppointeeContactNumber = GetValueIgnoreCase(dataObject, "vcAppointeeContactNumber");
+                        entity.vcAppointeeCkycNumber = GetValueIgnoreCase(dataObject, "vcAppointeeCkycNumber");
+                        entity.vcAppointeeAddress1 = GetValueIgnoreCase(dataObject, "vcAppointeeAddress1");
+                        entity.vcAppointeeAddress2 = GetValueIgnoreCase(dataObject, "vcAppointeeAddress2");
+                        entity.vcAppointeeLandmark = GetValueIgnoreCase(dataObject, "vcAppointeeLandmark");
+                        entity.vcAppointeeCity = GetValueIgnoreCase(dataObject, "vcAppointeeCity");
+                        entity.vcAppointeeState = GetValueIgnoreCase(dataObject, "vcAppointeeState");
+                        entity.vcAppointeeCountry = GetValueIgnoreCase(dataObject, "vcAppointeeCountry");
+                        entity.vcAppointeePincode = GetValueIgnoreCase(dataObject, "vcAppointeePincode");
+                        entity.btAppointeeAddressSameAsNominee = ParseBool(GetValueIgnoreCase(dataObject, "btAppointeeAddressSameAsNominee"));
+                        entity.vcRelationshipWithNominee = GetValueIgnoreCase(dataObject, "vcRelationshipWithNominee");
+                        entity.vcAppointeeSignature = GetValueIgnoreCase(dataObject, "vcAppointeeSignature");
+                        entity.intAgeAtOnset = ParseInt(GetValueIgnoreCase(dataObject, "intAgeAtOnset"));
+                        entity.vcLivingOrDeceased = GetValueIgnoreCase(dataObject, "vcLivingOrDeceased");
+                        entity.vcDiagnosis = GetValueIgnoreCase(dataObject, "vcDiagnosis");
+                        entity.vcBankAccountNumber = GetValueIgnoreCase(dataObject, "vcBankAccountNumber");
+                        entity.vcIFSCCODE = GetValueIgnoreCase(dataObject, "vcIFSCCODE");
+                        entity.vcBANKNAME = GetValueIgnoreCase(dataObject, "vcBANKNAME");
+                        entity.vcBranchLocation = GetValueIgnoreCase(dataObject, "vcBranchLocation");
+                        entity.vcAppointeeDedupeMode = GetValueIgnoreCase(dataObject, "vcAppointeeDedupeMode");
+                        entity.vcNomineeDedupeMode = GetValueIgnoreCase(dataObject, "vcNomineeDedupeMode");
+                        entity.vcLifeAsiaClientId = GetValueIgnoreCase(dataObject, "vcLifeAsiaClientId");
+                        entity.dtClientIDGeneratedOn = ParseDate(GetValueIgnoreCase(dataObject, "dtClientIDGeneratedOn"));
+                        entity.vcAppointeeLAClientID = GetValueIgnoreCase(dataObject, "vcAppointeeLAClientID");
+                        entity.dtAppointeeClientIDGeneratedOn = ParseDate(GetValueIgnoreCase(dataObject, "dtAppointeeClientIDGeneratedOn"));
+                        entity.intDeDupeStatus = ParseInt(GetValueIgnoreCase(dataObject, "intDeDupeStatus")) ?? 0;
+                        entity.intImageQCStatus = ParseInt(GetValueIgnoreCase(dataObject, "intImageQCStatus")) ?? 0;
+                        entity.intDocQCStatus = ParseInt(GetValueIgnoreCase(dataObject, "intDocQCStatus")) ?? 0;
+                        entity.intAppointeeDeDupeStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAppointeeDeDupeStatus")) ?? 0;
+                        entity.intAppointeeImageQCStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAppointeeImageQCStatus")) ?? 0;
+                        entity.intAppointeeDocQCStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAppointeeDocQCStatus")) ?? 0;
+                        entity.vcLastAccessIP = "0.0.0.0";
+                        entity.vcCreatedBy = partnerName ?? "system";
+                        entity.dtCreateDate = DateTime.Now;
+                        entity.bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false;
+
+                        _context.tblPF_NomineeDetails.Add(entity);
+                        await _context.SaveChangesAsync();
+                    }
+                    catch (Exception ex)
+                    {
+                        // Identify which property caused the exception
+                        result.Success = false;
+                        result.InvalidFields.Add($"Error saving NomineeDetails: {ex.Message}");
+                    }
                 }
             }
-
-            result.InvalidFields = invalidFields;
-            result.Success = invalidFields.Count == 0;
-
-            var partnerData = await _context.tblPartnerDatas
-                                    .Where(p => p.PartnerID == partnerId && !p.IsDeleted)
-                                    .Select(p => new { p.ApplicationNumber })
-                                    .FirstOrDefaultAsync();
-
-            if (partnerData == null || string.IsNullOrEmpty(partnerData.ApplicationNumber))
+            catch (Exception ex)
             {
                 result.Success = false;
-                result.InvalidFields.Add("ApplicationNumber (Not Found for given PartnerId)");
-                return result;
-            }
-
-            if (result.Success)
-            {
-                var entity = new tblPF_NomineeDetails
-                {
-                    intAssureType = ParseInt(GetValueIgnoreCase(dataObject, "intAssureType")),
-                    intFamilyDetailsId = ParseInt(GetValueIgnoreCase(dataObject, "intFamilyDetailsId")),
-                    vcRelation = GetValueIgnoreCase(dataObject, "vcRelation"),
-                    vcApplicationNumber = partnerData.ApplicationNumber,
-                    vcTitle = GetValueIgnoreCase(dataObject, "vcTitle"),
-                    vcFirstName = GetValueIgnoreCase(dataObject, "vcFirstName") ?? string.Empty,
-                    vcMiddleName = GetValueIgnoreCase(dataObject, "vcMiddleName"),
-                    vcLastName = GetValueIgnoreCase(dataObject, "vcLastName"),
-                    dtDOB = ParseDate(GetValueIgnoreCase(dataObject, "dtDOB")),
-                    chGender = GetValueIgnoreCase(dataObject, "chGender"),
-                    dcAnnualIncome = ParseDecimal(GetValueIgnoreCase(dataObject, "dcAnnualIncome")),
-                    vcMobileNumber = GetValueIgnoreCase(dataObject, "vcMobileNumber"),
-                    ftNomineePercentage = ParseDouble(GetValueIgnoreCase(dataObject, "ftNomineePercentage")),
-                    vcOccupation = GetValueIgnoreCase(dataObject, "vcOccupation"),
-                    btIsAppointee = ParseBool(GetValueIgnoreCase(dataObject, "btIsAppointee")),
-                    vcAppointeeRelation = GetValueIgnoreCase(dataObject, "vcAppointeeRelation"),
-                    vcAppointeeTile = GetValueIgnoreCase(dataObject, "vcAppointeeTile"),
-                    vcAppointeeFirstName = GetValueIgnoreCase(dataObject, "vcAppointeeFirstName"),
-                    vcAppointeeMiddleName = GetValueIgnoreCase(dataObject, "vcAppointeeMiddleName"),
-                    vcAppointeeLastName = GetValueIgnoreCase(dataObject, "vcAppointeeLastName"),
-                    vcAppointeeDob = ParseDate(GetValueIgnoreCase(dataObject, "vcAppointeeDob")),
-                    chAppointeeGender = GetValueIgnoreCase(dataObject, "chAppointeeGender"),
-                    vcAppointeeContactNumber = GetValueIgnoreCase(dataObject, "vcAppointeeContactNumber"),
-                    vcAppointeeCkycNumber = GetValueIgnoreCase(dataObject, "vcAppointeeCkycNumber"),
-                    vcAppointeeAddress1 = GetValueIgnoreCase(dataObject, "vcAppointeeAddress1"),
-                    vcAppointeeAddress2 = GetValueIgnoreCase(dataObject, "vcAppointeeAddress2"),
-                    vcAppointeeLandmark = GetValueIgnoreCase(dataObject, "vcAppointeeLandmark"),
-                    vcAppointeeCity = GetValueIgnoreCase(dataObject, "vcAppointeeCity"),
-                    vcAppointeeState = GetValueIgnoreCase(dataObject, "vcAppointeeState"),
-                    vcAppointeeCountry = GetValueIgnoreCase(dataObject, "vcAppointeeCountry"),
-                    vcAppointeePincode = GetValueIgnoreCase(dataObject, "vcAppointeePincode"),
-                    btAppointeeAddressSameAsNominee = ParseBool(GetValueIgnoreCase(dataObject, "btAppointeeAddressSameAsNominee")),
-                    vcRelationshipWithNominee = GetValueIgnoreCase(dataObject, "vcRelationshipWithNominee"),
-                    vcAppointeeSignature = GetValueIgnoreCase(dataObject, "vcAppointeeSignature"),
-                    intAgeAtOnset = ParseInt(GetValueIgnoreCase(dataObject, "intAgeAtOnset")),
-                    vcLivingOrDeceased = GetValueIgnoreCase(dataObject, "vcLivingOrDeceased"),
-                    vcDiagnosis = GetValueIgnoreCase(dataObject, "vcDiagnosis"),
-                    vcBankAccountNumber = GetValueIgnoreCase(dataObject, "vcBankAccountNumber"),
-                    vcIFSCCODE = GetValueIgnoreCase(dataObject, "vcIFSCCODE"),
-                    vcBANKNAME = GetValueIgnoreCase(dataObject, "vcBANKNAME"),
-                    vcBranchLocation = GetValueIgnoreCase(dataObject, "vcBranchLocation"),
-                    vcAppointeeDedupeMode = GetValueIgnoreCase(dataObject, "vcAppointeeDedupeMode"),
-                    vcNomineeDedupeMode = GetValueIgnoreCase(dataObject, "vcNomineeDedupeMode"),
-                    vcLifeAsiaClientId = GetValueIgnoreCase(dataObject, "vcLifeAsiaClientId"),
-                    dtClientIDGeneratedOn = ParseDate(GetValueIgnoreCase(dataObject, "dtClientIDGeneratedOn")),
-                    vcAppointeeLAClientID = GetValueIgnoreCase(dataObject, "vcAppointeeLAClientID"),
-                    dtAppointeeClientIDGeneratedOn = ParseDate(GetValueIgnoreCase(dataObject, "dtAppointeeClientIDGeneratedOn")),
-                    intDeDupeStatus = ParseInt(GetValueIgnoreCase(dataObject, "intDeDupeStatus")) ?? 0,
-                    intImageQCStatus = ParseInt(GetValueIgnoreCase(dataObject, "intImageQCStatus")) ?? 0,
-                    intDocQCStatus = ParseInt(GetValueIgnoreCase(dataObject, "intDocQCStatus")) ?? 0,
-                    intAppointeeDeDupeStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAppointeeDeDupeStatus")) ?? 0,
-                    intAppointeeImageQCStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAppointeeImageQCStatus")) ?? 0,
-                    intAppointeeDocQCStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAppointeeDocQCStatus")) ?? 0,
-                    vcLastAccessIP = "0.0.0.0",
-                    vcCreatedBy = partnerName ?? "system",
-                    dtCreateDate = DateTime.Now,
-                    bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
-                };
-                _context.tblPF_NomineeDetails.Add(entity);
-                await _context.SaveChangesAsync();
+                result.InvalidFields.Add($"General Error: {ex.Message}");
             }
 
             return result;
         }
+
 
         public async Task<ValidationResultModel> NRIDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
@@ -2978,20 +2994,19 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+            // 2️⃣ Normalize payload
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+            // 3️⃣ Handle nested JSON
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
-
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+            // 4️⃣ Field validation
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -3005,14 +3020,12 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -3036,76 +3049,88 @@ namespace PartnerFlowAPI.Services.Implementation
 
             if (result.Success)
             {
-                var entity = new tblPF_PersonalDetails
+                try
                 {
+                    var entity = new tblPF_PersonalDetails
+                    {
+                        vcApplicationNumber = partnerData.ApplicationNumber,
+                        intAssureType = ParseInt(GetValueIgnoreCase(dataObject, "intAssureType")) ?? 0,
+                        vcTitle = GetValueIgnoreCase(dataObject, "vcTitle"),
+                        vcCompanyName = GetValueIgnoreCase(dataObject, "vcCompanyName"),
+                        vcFirstName = GetValueIgnoreCase(dataObject, "vcFirstName"),
+                        vcMiddleName = GetValueIgnoreCase(dataObject, "vcMiddleName"),
+                        vcLastName = GetValueIgnoreCase(dataObject, "vcLastName"),
+                        vcNameBeforeMarriageTitle = GetValueIgnoreCase(dataObject, "vcNameBeforeMarriageTitle"),
+                        vcNameBeforeMarriageFirstName = GetValueIgnoreCase(dataObject, "vcNameBeforeMarriageFirstName"),
+                        vcNameBeforeMarriageMiddleName = GetValueIgnoreCase(dataObject, "vcNameBeforeMarriageMiddleName"),
+                        vcNameBeforeMarriageLastName = GetValueIgnoreCase(dataObject, "vcNameBeforeMarriageLastName"),
+                        vcAdharNumber = GetValueIgnoreCase(dataObject, "vcAdharNumber"),
+                        vcPANNumber = GetValueIgnoreCase(dataObject, "vcPANNumber"),
+                        intMaritalStatus = ParseInt(GetValueIgnoreCase(dataObject, "intMaritalStatus")),
+                        intNumberOfChildren = ParseInt(GetValueIgnoreCase(dataObject, "intNumberOfChildren")),
+                        vcCKYCNumber = GetValueIgnoreCase(dataObject, "vcCKYCNumber"),
+                        vcEducationQualification = GetValueIgnoreCase(dataObject, "vcEducationQualification"),
+                        dcAnnualIncome = ParseDecimal(GetValueIgnoreCase(dataObject, "dcAnnualIncome")),
+                        vcAUCustomerId = GetValueIgnoreCase(dataObject, "vcAUCustomerId"),
+                        vcAUSavingsOrLoanAccountNumber = GetValueIgnoreCase(dataObject, "vcAUSavingsOrLoanAccountNumber"),
+                        chGender = string.IsNullOrWhiteSpace(GetValueIgnoreCase(dataObject, "chGender"))
+                            ? (char?)null
+                            : GetValueIgnoreCase(dataObject, "chGender")![0],
+                        dtDOB = ParseDate(GetValueIgnoreCase(dataObject, "dtDOB")),
+                        vcCountryOfBirth = GetValueIgnoreCase(dataObject, "vcCountryOfBirth"),
+                        intNationality = ParseInt(GetValueIgnoreCase(dataObject, "intNationality")),
+                        btIsCriminalRecord = ParseBool(GetValueIgnoreCase(dataObject, "btIsCriminalRecord")),
+                        vcCriminalCaseDescription = GetValueIgnoreCase(dataObject, "vcCriminalCaseDescription"),
+                        btRelatedToPoliticalParty = ParseBool(GetValueIgnoreCase(dataObject, "btRelatedToPoliticalParty")),
+                        vcPoliticalDescription = GetValueIgnoreCase(dataObject, "vcPoliticalDescription"),
+                        vcRelationWithLA = GetValueIgnoreCase(dataObject, "vcRelationWithLA"),
+                        vcInterNationalNumber = GetValueIgnoreCase(dataObject, "vcInterNationalNumber"),
+                        vcCountryOfResidence = GetValueIgnoreCase(dataObject, "vcCountryOfResidence"),
+                        btPanVerified = ParseBool(GetValueIgnoreCase(dataObject, "btPanVerified")),
+                        btPanDOBMatch = ParseBool(GetValueIgnoreCase(dataObject, "btPanDOBMatch")),
+                        btPanNameMatch = ParseBool(GetValueIgnoreCase(dataObject, "btPanNameMatch")),
+                        vcPanDublicate = GetValueIgnoreCase(dataObject, "vcPanDublicate"),
+                        vcRequestId = GetValueIgnoreCase(dataObject, "vcRequestId"),
+                        btisPanVerify = ParseBool(GetValueIgnoreCase(dataObject, "btisPanVerify")),
+                        intAMLStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAMLStatus")),
+                        vcCibilScore = GetValueIgnoreCase(dataObject, "vcCibilScore"),
+                        vcIncomeEstimator = GetValueIgnoreCase(dataObject, "vcIncomeEstimator"),
+                        vcIIBScore = GetValueIgnoreCase(dataObject, "vcIIBScore"),
+                        vcDedupeMode = GetValueIgnoreCase(dataObject, "vcDedupeMode"),
+                        vcLastAccessIP = "0.0.0.0",
+                        vcCreatedBy = partnerName ?? "system",
+                        dtCreateDate = DateTime.Now,
+                        vcModifiedBy = null,
+                        dtModifiedDate = null,
+                        dtDeletedDate = null,
+                        bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false,
+                        intDeDupeStatus = 0,
+                        intImageQCStatus = 0,
+                        intDocQCStatus = 0
+                        
+                    };
 
-                    vcApplicationNumber = partnerData.ApplicationNumber,
-                    intAssureType = ParseInt(GetValueIgnoreCase(dataObject, "intAssureType")) ?? 0,
-                    vcTitle = GetValueIgnoreCase(dataObject, "vcTitle"),
-                    vcCompanyName = GetValueIgnoreCase(dataObject, "vcCompanyName"),
-                    vcFirstName = GetValueIgnoreCase(dataObject, "vcFirstName"),
-                    vcMiddleName = GetValueIgnoreCase(dataObject, "vcMiddleName"),
-                    vcLastName = GetValueIgnoreCase(dataObject, "vcLastName"),
-                    vcNameBeforeMarriageTitle = GetValueIgnoreCase(dataObject, "vcNameBeforeMarriageTitle"),
-                    vcNameBeforeMarriageFirstName = GetValueIgnoreCase(dataObject, "vcNameBeforeMarriageFirstName"),
-                    vcNameBeforeMarriageMiddleName = GetValueIgnoreCase(dataObject, "vcNameBeforeMarriageMiddleName"),
-                    vcNameBeforeMarriageLastName = GetValueIgnoreCase(dataObject, "vcNameBeforeMarriageLastName"),
-                    vcAdharNumber = GetValueIgnoreCase(dataObject, "vcAdharNumber"),
-                    vcPANNumber = GetValueIgnoreCase(dataObject, "vcPANNumber"),
-                    intMaritalStatus = ParseInt(GetValueIgnoreCase(dataObject, "intMaritalStatus")),
-                    intNumberOfChildren = ParseInt(GetValueIgnoreCase(dataObject, "intNumberOfChildren")),
-                    vcCKYCNumber = GetValueIgnoreCase(dataObject, "vcCKYCNumber"),
-                    vcEducationQualification = GetValueIgnoreCase(dataObject, "vcEducationQualification"),
-                    dcAnnualIncome = ParseDecimal(GetValueIgnoreCase(dataObject, "dcAnnualIncome")),
-                    vcAUCustomerId = GetValueIgnoreCase(dataObject, "vcAUCustomerId"),
-                    vcAUSavingsOrLoanAccountNumber = GetValueIgnoreCase(dataObject, "vcAUSavingsOrLoanAccountNumber"),
-                    chGender = string.IsNullOrWhiteSpace(GetValueIgnoreCase(dataObject, "chGender"))
-                ? (char?)null
-                : GetValueIgnoreCase(dataObject, "chGender")![0],
-                    dtDOB = ParseDate(GetValueIgnoreCase(dataObject, "dtDOB")),
-                    vcCountryOfBirth = GetValueIgnoreCase(dataObject, "vcCountryOfBirth"),
-                    intNationality = ParseInt(GetValueIgnoreCase(dataObject, "intNationality")),
-                    btIsCriminalRecord = ParseBool(GetValueIgnoreCase(dataObject, "btIsCriminalRecord")),
-                    vcCriminalCaseDescription = GetValueIgnoreCase(dataObject, "vcCriminalCaseDescription"),
-                    btRelatedToPoliticalParty = ParseBool(GetValueIgnoreCase(dataObject, "btRelatedToPoliticalParty")),
-                    vcPoliticalDescription = GetValueIgnoreCase(dataObject, "vcPoliticalDescription"),
+                    _context.tblPF_PersonalDetails.Add(entity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+                    // 🔍 Log detailed info about failing fields
+                    var fieldValues = string.Join(Environment.NewLine,
+                        dataObject.Properties().Select(p =>
+                            $"{p.Name}: {(p.Value?.Type == JTokenType.Null ? "NULL" : p.Value?.ToString())}"
+                        ));
 
-                    vcRelationWithLA = GetValueIgnoreCase(dataObject, "vcRelationWithLA"),
-                    vcInterNationalNumber = GetValueIgnoreCase(dataObject, "vcInterNationalNumber"),
-                    vcCountryOfResidence = GetValueIgnoreCase(dataObject, "vcCountryOfResidence"),
-
-                    btPanVerified = ParseBool(GetValueIgnoreCase(dataObject, "btPanVerified")),
-                    btPanDOBMatch = ParseBool(GetValueIgnoreCase(dataObject, "btPanDOBMatch")),
-                    btPanNameMatch = ParseBool(GetValueIgnoreCase(dataObject, "btPanNameMatch")),
-                    vcPanDublicate = GetValueIgnoreCase(dataObject, "vcPanDublicate"),
-                    vcRequestId = GetValueIgnoreCase(dataObject, "vcRequestId"),
-                    btisPanVerify = ParseBool(GetValueIgnoreCase(dataObject, "btisPanVerify")),
-                    intAMLStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAMLStatus")),
-                    vcCibilScore = GetValueIgnoreCase(dataObject, "vcCibilScore"),
-                    vcIncomeEstimator = GetValueIgnoreCase(dataObject, "vcIncomeEstimator"),
-                    vcIIBScore = GetValueIgnoreCase(dataObject, "vcIIBScore"),
-                    vcDedupeMode = GetValueIgnoreCase(dataObject, "vcDedupeMode"),
-
-                    vcLastAccessIP = "0.0.0.0",
-                    vcCreatedBy = partnerName ?? "system",
-                    dtCreateDate = DateTime.Now,
-                    vcModifiedBy = null,
-                    dtModifiedDate = null,
-                    dtDeletedDate = null,
-                    bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false,
-                    intDeDupeStatus = 0,
-                    intImageQCStatus = 0,
-                    intDocQCStatus = 0,
-                    SysStartTime = DateTime.Now,
-                    SysEndTime = DateTime.Parse("9999-12-31 23:59:59")
-
-                };
-                _context.tblPF_PersonalDetails.Add(entity);
-                await _context.SaveChangesAsync();
+                    result.Success = false;
+                    result.InvalidFields.Add($"❌ Exception: {ex.Message}");
+                    result.InvalidFields.Add($"🔍 StackTrace: {ex.StackTrace}");
+                    result.InvalidFields.Add($"🧾 Payload Values:\n{fieldValues}");
+                }
             }
 
             return result;
         }
+
 
         public async Task<string> SubmitDataAsync(int partnerId, Dictionary<string, object> payload)
         {
