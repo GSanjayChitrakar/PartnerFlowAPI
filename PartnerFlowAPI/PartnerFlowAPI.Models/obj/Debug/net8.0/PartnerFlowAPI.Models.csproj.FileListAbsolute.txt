@@ -1,0 +1,36 @@
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\bin\Debug\net8.0\PartnerFlowAPI.Models.deps.json
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\bin\Debug\net8.0\PartnerFlowAPI.Models.dll
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\bin\Debug\net8.0\PartnerFlowAPI.Models.pdb
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.AssemblyInfoInputs.cache
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.AssemblyInfo.cs
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.csproj.CoreCompileInputs.cache
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.dll
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\refint\PartnerFlowAPI.Models.dll
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.pdb
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\ref\PartnerFlowAPI.Models.dll
+C:\Shubham Chavan\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.csproj.AssemblyReference.cache
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\bin\Debug\net8.0\PartnerFlowAPI.Models.deps.json
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\bin\Debug\net8.0\PartnerFlowAPI.Models.dll
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\bin\Debug\net8.0\PartnerFlowAPI.Models.pdb
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.csproj.AssemblyReference.cache
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.AssemblyInfoInputs.cache
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.AssemblyInfo.cs
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.csproj.CoreCompileInputs.cache
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.dll
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\refint\PartnerFlowAPI.Models.dll
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.pdb
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\ref\PartnerFlowAPI.Models.dll
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\bin\Debug\net8.0\PartnerFlowAPI.Models.deps.json
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\bin\Debug\net8.0\PartnerFlowAPI.Models.dll
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\bin\Debug\net8.0\PartnerFlowAPI.Models.pdb
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.csproj.AssemblyReference.cache
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.AssemblyInfoInputs.cache
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.AssemblyInfo.cs
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.csproj.CoreCompileInputs.cache
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.dll
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\refint\PartnerFlowAPI.Models.dll
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\PartnerFlowAPI.Models.pdb
+C:\Users\410484\source\repos\Shubham\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI\PartnerFlowAPI.Models\obj\Debug\net8.0\ref\PartnerFlowAPI.Models.dll

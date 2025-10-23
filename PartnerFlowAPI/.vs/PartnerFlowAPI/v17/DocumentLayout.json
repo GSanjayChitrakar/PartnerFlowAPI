@@ -1,0 +1,824 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{462E30E3-AD43-4261-9D78-9AED6E9C384B}|PartnerFlowAPI.Services\\PartnerFlowAPI.Services.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.services\\implementation\\partnerdataservice .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{462E30E3-AD43-4261-9D78-9AED6E9C384B}|PartnerFlowAPI.Services\\PartnerFlowAPI.Services.csproj|solutionrelative:partnerflowapi.services\\implementation\\partnerdataservice .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{462E30E3-AD43-4261-9D78-9AED6E9C384B}|PartnerFlowAPI.Services\\PartnerFlowAPI.Services.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.services\\interfaces\\ipartnerdataservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{462E30E3-AD43-4261-9D78-9AED6E9C384B}|PartnerFlowAPI.Services\\PartnerFlowAPI.Services.csproj|solutionrelative:partnerflowapi.services\\interfaces\\ipartnerdataservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi\\controllers\\partnerdatacontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|solutionrelative:partnerflowapi\\controllers\\partnerdatacontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A91C46C-8FD1-461D-B6C2-9A4110CAEA17}|PartnerFlowAPI.Models\\PartnerFlowAPI.Models.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.models\\dtos\\commonresultmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A91C46C-8FD1-461D-B6C2-9A4110CAEA17}|PartnerFlowAPI.Models\\PartnerFlowAPI.Models.csproj|solutionrelative:partnerflowapi.models\\dtos\\commonresultmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|solutionrelative:partnerflowapi\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_mandatedetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_mandatedetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_mandatedetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_mandatedetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_healthconditions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_healthconditions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|solutionrelative:partnerflowapi\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_financialquestionconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_financialquestionconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_financialquestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_financialquestion.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_bankaccountdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_bankaccountdata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_insurancehistoryconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_insurancehistoryconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_healthconditionsdetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_healthconditionsdetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_healthconditionsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_healthconditionsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_form60questionsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_form60questionsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_form60questions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_form60questions.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_fatcadetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_fatcadetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_familydetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_familydetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_employmentdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_employmentdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_employmentdetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_employmentdetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_communicationdetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_communicationdetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_agentdetailconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_agentdetailconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_agentdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_agentdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\context\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\context\\applicationdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{462E30E3-AD43-4261-9D78-9AED6E9C384B}|PartnerFlowAPI.Services\\PartnerFlowAPI.Services.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.services\\implementation\\partnerauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{462E30E3-AD43-4261-9D78-9AED6E9C384B}|PartnerFlowAPI.Services\\PartnerFlowAPI.Services.csproj|solutionrelative:partnerflowapi.services\\implementation\\partnerauthservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{7A91C46C-8FD1-461D-B6C2-9A4110CAEA17}|PartnerFlowAPI.Models\\PartnerFlowAPI.Models.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.models\\dtos\\validationresultmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{7A91C46C-8FD1-461D-B6C2-9A4110CAEA17}|PartnerFlowAPI.Models\\PartnerFlowAPI.Models.csproj|solutionrelative:partnerflowapi.models\\dtos\\validationresultmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_partialwithdrawal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_partialwithdrawal.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi\\controllers\\authcontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|solutionrelative:partnerflowapi\\controllers\\authcontroller .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_insurancehistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_insurancehistory.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_familydetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_familydetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_personaldetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_personaldetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpf_personaldetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpf_personaldetailsconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_summarydetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_summarydetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_paymentdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_paymentdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_otherinsurances.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_otherinsurances.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_nridetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_nridetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_nomineedetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_nomineedetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_minordetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_minordetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_lifestyledetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_lifestyledetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_healthconditionsdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_healthconditionsdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_fatcadetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_fatcadetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpf_communicationdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpf_communicationdetails.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\mst_pfa_field.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\mst_pfa_field.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\mst_pfa_partnerconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\mst_pfa_partnerconfiguration.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\mst_pfa_partner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\mst_pfa_partner.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\entities\\tblpartnersuitability.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\entities\\tblpartnersuitability.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi.database\\configuration\\tblpartnersuitabilityconfiguration .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{33C53266-17AC-43EB-96FC-9F355A129F07}|PartnerFlowAPI.Database\\PartnerFlowAPI.Database.csproj|solutionrelative:partnerflowapi.database\\configuration\\tblpartnersuitabilityconfiguration .cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi\\controllers\\fieldscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|solutionrelative:partnerflowapi\\controllers\\fieldscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|c:\\users\\410484\\source\\repos\\shubham\\partnerflowapi\\partnerflowapi\\partnerflowapi\\partnerflowapi\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{78B667F2-E3F1-4E0E-9D20-E7DA4238CDE4}|PartnerFlowAPI\\PartnerFlowAPI.csproj|solutionrelative:partnerflowapi\\controllers\\homecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 1,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "CommonResultModel.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Models\\Dtos\\CommonResultModel.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Models\\Dtos\\CommonResultModel.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Models\\Dtos\\CommonResultModel.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Models\\Dtos\\CommonResultModel.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAUwA8AAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-23T06:12:40.725Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PartnerDataService .cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Services\\Implementation\\PartnerDataService .cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Services\\Implementation\\PartnerDataService .cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Services\\Implementation\\PartnerDataService .cs",
+              "RelativeToolTip": "PartnerFlowAPI.Services\\Implementation\\PartnerDataService .cs",
+              "ViewState": "AgIAAHoJAAAAAAAAAADwvycMAAAhAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T11:07:24.555Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "PartnerDataController .cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\Controllers\\PartnerDataController .cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI\\Controllers\\PartnerDataController .cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\Controllers\\PartnerDataController .cs",
+              "RelativeToolTip": "PartnerFlowAPI\\Controllers\\PartnerDataController .cs",
+              "ViewState": "AgIAADgCAAAA1MzMzMwQwDwCAABPAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-10T05:41:00.489Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IPartnerDataService.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Services\\Interfaces\\IPartnerDataService.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Services\\Interfaces\\IPartnerDataService.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Services\\Interfaces\\IPartnerDataService.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Services\\Interfaces\\IPartnerDataService.cs",
+              "ViewState": "AgIAABsAAAAAAAAAAAAgwCQAAABWAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T10:26:17.769Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "tblpf_financialQuestion.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblpf_financialQuestion.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblpf_financialQuestion.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblpf_financialQuestion.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblpf_financialQuestion.cs",
+              "ViewState": "AgIAAEcAAAAAAAAAAAAwwFIAAAAXAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:39:11.817Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\appsettings.json",
+              "RelativeDocumentMoniker": "PartnerFlowAPI\\appsettings.json",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\appsettings.json",
+              "RelativeToolTip": "PartnerFlowAPI\\appsettings.json",
+              "ViewState": "AgIAAAEAAAAAAAAAAAAYwAkAAABjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2025-10-13T06:27:09.743Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "tblpf_financialQuestionConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblpf_financialQuestionConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblpf_financialQuestionConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblpf_financialQuestionConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblpf_financialQuestionConfiguration.cs",
+              "ViewState": "AgIAAC0AAAAAKDMzMzPjvzYAAAA2AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T06:26:30.855Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "tblPF_HealthConditions.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_HealthConditions.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_HealthConditions.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_HealthConditions.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_HealthConditions.cs",
+              "ViewState": "AgIAAEYAAAAAAAAAAAA3wFAAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:50:57.447Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "tblPF_MandateDetailsConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_MandateDetailsConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPF_MandateDetailsConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_MandateDetailsConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPF_MandateDetailsConfiguration.cs",
+              "ViewState": "AgIAAB8AAADAxszMzAwjwC0AAAA6AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-20T11:43:06.931Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "tblPF_MandateDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_MandateDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_MandateDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_MandateDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_MandateDetails.cs",
+              "ViewState": "AgIAAAoAAABAZWZmZmYnwBcAAAAoAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:15:13.854Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "tblPF_BankAccountData.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_BankAccountData.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_BankAccountData.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_BankAccountData.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_BankAccountData.cs",
+              "ViewState": "AgIAACMAAAAAAAAAAAA/wC4AAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T11:28:50.191Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\Program.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI\\Program.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\Program.cs",
+              "RelativeToolTip": "PartnerFlowAPI\\Program.cs",
+              "ViewState": "AgIAAFEAAAAAAAAAAAAcwFkAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-07T12:05:44.296Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "tblPF_HealthConditionsConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_HealthConditionsConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPF_HealthConditionsConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_HealthConditionsConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPF_HealthConditionsConfiguration.cs",
+              "ViewState": "AgIAAGUAAAAAAAAAAAAAwH4AAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:51:12.728Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "tblPF_Form60QuestionsConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_Form60QuestionsConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPF_Form60QuestionsConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_Form60QuestionsConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPF_Form60QuestionsConfiguration.cs",
+              "ViewState": "AgIAACcAAAAApZmZmZkdwC8AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:46:42.676Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "tblPF_HealthConditionsDetailsConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_HealthConditionsDetailsConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPF_HealthConditionsDetailsConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_HealthConditionsDetailsConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPF_HealthConditionsDetailsConfiguration.cs",
+              "ViewState": "AgIAABcAAACAmZmZmZklwCoAAAAwAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:01:07.998Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "tblPF_InsuranceHistoryConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_InsuranceHistoryConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPF_InsuranceHistoryConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_InsuranceHistoryConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPF_InsuranceHistoryConfiguration.cs",
+              "ViewState": "AgIAABAAAABgZmZmZmYswAYAAAA0AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:05:05.094Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "tblPF_Form60Questions.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_Form60Questions.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_Form60Questions.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_Form60Questions.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_Form60Questions.cs",
+              "ViewState": "AgIAAEwAAAAAAAAAAAAjwFsAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:46:25.959Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "tblpf_FatcaDetailsConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblpf_FatcaDetailsConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblpf_FatcaDetailsConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblpf_FatcaDetailsConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblpf_FatcaDetailsConfiguration.cs",
+              "ViewState": "AgIAAB0AAAAAAAAAAAAAwC4AAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:34:47.192Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "tblPF_FamilyDetailsConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_FamilyDetailsConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPF_FamilyDetailsConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_FamilyDetailsConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPF_FamilyDetailsConfiguration.cs",
+              "ViewState": "AgIAAHYAAACA/v///98wwIIAAAAyAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:30:21.77Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "tblPF_EmploymentDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_EmploymentDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_EmploymentDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_EmploymentDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_EmploymentDetails.cs",
+              "ViewState": "AgIAAFQAAAAAAAAAAIAwwF8AAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:24:39.211Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "tblPF_EmploymentDetailsConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_EmploymentDetailsConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPF_EmploymentDetailsConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_EmploymentDetailsConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPF_EmploymentDetailsConfiguration.cs",
+              "ViewState": "AgIAADEAAAAA9f////8PwEcAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:25:21.107Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "tblPF_CommunicationDetailsConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_CommunicationDetailsConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPF_CommunicationDetailsConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_CommunicationDetailsConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPF_CommunicationDetailsConfiguration.cs",
+              "ViewState": "AgIAAEEAAACAm5mZmZkhwFIAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T11:40:47.499Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "tblPF_AgentDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_AgentDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_AgentDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_AgentDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_AgentDetails.cs",
+              "ViewState": "AgIAAEAAAAAAAAAAAAAswEoAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T11:14:05.526Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "tblPF_AgentDetailConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_AgentDetailConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPF_AgentDetailConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_AgentDetailConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPF_AgentDetailConfiguration.cs",
+              "ViewState": "AgIAACQAAAAAZmZmZmYswDMAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T11:15:54.484Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "ApplicationDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Context\\ApplicationDbContext.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Context\\ApplicationDbContext.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Context\\ApplicationDbContext.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Context\\ApplicationDbContext.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAA5wBwAAAAVAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T11:10:42.784Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "PartnerAuthService.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Services\\Implementation\\PartnerAuthService.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Services\\Implementation\\PartnerAuthService.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Services\\Implementation\\PartnerAuthService.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Services\\Implementation\\PartnerAuthService.cs",
+              "ViewState": "AgIAACkAAACAZWZmZmYowCQAAAAvAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T08:58:02.216Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "ValidationResultModel.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Models\\Dtos\\ValidationResultModel.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Models\\Dtos\\ValidationResultModel.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Models\\Dtos\\ValidationResultModel.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Models\\Dtos\\ValidationResultModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAwAAAAxAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T11:47:27.933Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "tblpf_PartialWithdrawal.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblpf_PartialWithdrawal.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblpf_PartialWithdrawal.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblpf_PartialWithdrawal.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblpf_PartialWithdrawal.cs",
+              "ViewState": "AgIAAAgAAACwzMzMzMw+wBMAAABAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:42:25.242Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "tblPF_InsuranceHistory.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_InsuranceHistory.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_InsuranceHistory.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_InsuranceHistory.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_InsuranceHistory.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAAAAB8AAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:04:43.426Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "AuthController .cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\Controllers\\AuthController .cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI\\Controllers\\AuthController .cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\Controllers\\AuthController .cs",
+              "RelativeToolTip": "PartnerFlowAPI\\Controllers\\AuthController .cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-15T08:57:57.239Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "tblPF_FamilyDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_FamilyDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_FamilyDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_FamilyDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_FamilyDetails.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAuwAcAAAARAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:30:02.118Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "tblPF_PersonalDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_PersonalDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_PersonalDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_PersonalDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_PersonalDetails.cs",
+              "ViewState": "AgIAAI0AAAAAAAAAAAAUwJEAAAAbAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:53:53.712Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "tblPF_PersonalDetailsConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_PersonalDetailsConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPF_PersonalDetailsConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPF_PersonalDetailsConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPF_PersonalDetailsConfiguration.cs",
+              "ViewState": "AgIAAPwAAAAAAAAAAAAAAP4AAAAmAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:54:10.945Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "Tblpf_SummaryDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\Tblpf_SummaryDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\Tblpf_SummaryDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\Tblpf_SummaryDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\Tblpf_SummaryDetails.cs",
+              "ViewState": "AgIAAAUAAAAAAAAAAAAxwCIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T14:02:08.653Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "tblPF_PaymentDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_PaymentDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_PaymentDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_PaymentDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_PaymentDetails.cs",
+              "ViewState": "AgIAAJoAAAAAAAAAAAAAwKMAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:45:33.137Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "tblPF_OtherInsurances.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_OtherInsurances.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_OtherInsurances.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_OtherInsurances.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_OtherInsurances.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:38:49.202Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "tblPF_NRIDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_NRIDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_NRIDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_NRIDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_NRIDetails.cs",
+              "ViewState": "AgIAAH8AAAAAAAAAAAAAwJwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:34:09.024Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "tblPF_NomineeDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_NomineeDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_NomineeDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_NomineeDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_NomineeDetails.cs",
+              "ViewState": "AgIAAHQAAAAAAAAAAAAAwJEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:26:27.008Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "tblPF_MinorDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_MinorDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_MinorDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_MinorDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_MinorDetails.cs",
+              "ViewState": "AgIAAFcAAAAAAAAAAAAAwHQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:20:52.654Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "tblPF_LifeStyleDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_LifeStyleDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_LifeStyleDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_LifeStyleDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_LifeStyleDetails.cs",
+              "ViewState": "AgIAAFUAAAAAAAAAAAAxwHIAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:09:47.505Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "tblPF_HealthConditionsDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_HealthConditionsDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_HealthConditionsDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_HealthConditionsDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_HealthConditionsDetails.cs",
+              "ViewState": "AgIAAA8AAAAgmZmZmZknwB4AAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T13:00:48.407Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "tblpf_FatcaDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblpf_FatcaDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblpf_FatcaDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblpf_FatcaDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblpf_FatcaDetails.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAcAAAAjAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T12:34:31.441Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "tblPF_CommunicationDetails.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_CommunicationDetails.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPF_CommunicationDetails.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPF_CommunicationDetails.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPF_CommunicationDetails.cs",
+              "ViewState": "AgIAAFMAAAAAAAAAAAAxwHAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T11:40:16.433Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "MST_PFA_Field.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\MST_PFA_Field.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\MST_PFA_Field.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\MST_PFA_Field.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\MST_PFA_Field.cs",
+              "ViewState": "AgIAAAUAAABAMzMzMzMbwAoAAAAFAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T10:59:37.406Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "MST_PFA_PartnerConfiguration.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\MST_PFA_PartnerConfiguration.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\MST_PFA_PartnerConfiguration.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\MST_PFA_PartnerConfiguration.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\MST_PFA_PartnerConfiguration.cs",
+              "ViewState": "AgIAAD0AAACAZGZmZmYswFQAAAAlAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T10:58:50.645Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "MST_PFA_Partner.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\MST_PFA_Partner.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\MST_PFA_Partner.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\MST_PFA_Partner.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\MST_PFA_Partner.cs",
+              "ViewState": "AgIAACsAAADAZmZmZmYmwD8AAAAgAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-14T10:58:06.634Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "tblPartnerSuitabilityConfiguration .cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPartnerSuitabilityConfiguration .cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Configuration\\tblPartnerSuitabilityConfiguration .cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Configuration\\tblPartnerSuitabilityConfiguration .cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Configuration\\tblPartnerSuitabilityConfiguration .cs",
+              "ViewState": "AgIAAJcAAAAAAAAAAAAAwLQAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T11:09:24.066Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "tblPartnerSuitability.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPartnerSuitability.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI.Database\\Entities\\tblPartnerSuitability.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI.Database\\Entities\\tblPartnerSuitability.cs",
+              "RelativeToolTip": "PartnerFlowAPI.Database\\Entities\\tblPartnerSuitability.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAoAAAAUAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-13T11:09:10.077Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "FieldsController.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\Controllers\\FieldsController.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI\\Controllers\\FieldsController.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\Controllers\\FieldsController.cs",
+              "RelativeToolTip": "PartnerFlowAPI\\Controllers\\FieldsController.cs",
+              "ViewState": "AgIAAAYAAAAAAAAAAAAAAA0AAAA1AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-10T05:41:11.949Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "HomeController.cs",
+              "DocumentMoniker": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\Controllers\\HomeController.cs",
+              "RelativeDocumentMoniker": "PartnerFlowAPI\\Controllers\\HomeController.cs",
+              "ToolTip": "C:\\Users\\410484\\source\\repos\\Shubham\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\PartnerFlowAPI\\Controllers\\HomeController.cs",
+              "RelativeToolTip": "PartnerFlowAPI\\Controllers\\HomeController.cs",
+              "ViewState": "AgIAAA8AAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-10-10T05:41:08.964Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
