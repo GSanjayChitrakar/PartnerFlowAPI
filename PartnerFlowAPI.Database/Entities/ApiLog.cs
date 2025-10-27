@@ -68,7 +68,7 @@ namespace PartnerFlowAPI.Database.Entities
         [Column("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
 
-        [MaxLength(50)]
+        
         [Column("IpAddress")]
         public string? IpAddress { get; set; }
     }

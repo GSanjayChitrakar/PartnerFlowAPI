@@ -26,11 +26,11 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
 
-                var result = await _partnerDataService.ProcessPartnerDataAsync(partnerId, payload , partnerName);
+                var result = await _partnerDataService.ProcessPartnerDataAsync(partnerId, payload, partnerName);
 
                 if (result.InvalidFields.Any())
                 {
@@ -55,7 +55,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.AgentDetailsDataAsync(partnerId, payload, partnerName);
@@ -82,7 +82,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.BankAccountDataAsync(partnerId, payload, partnerName);
@@ -109,7 +109,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.CommunicationDetailstDataAsync(partnerId, payload, partnerName);
@@ -136,7 +136,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.EmploymentDetailstDataAsync(partnerId, payload, partnerName);
@@ -163,7 +163,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.FamilyDetailstDataAsync(partnerId, payload, partnerName);
@@ -190,7 +190,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.FATCADetailstDataAsync(partnerId, payload, partnerName);
@@ -217,7 +217,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.FinancialQuestionDataAsync(partnerId, payload, partnerName);
@@ -244,7 +244,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.Form60QuestionDataAsync(partnerId, payload, partnerName);
@@ -271,7 +271,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.HealthConditionDataAsync(partnerId, payload, partnerName);
@@ -298,7 +298,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.HealthConditionDetailsDataAsync(partnerId, payload, partnerName);
@@ -325,7 +325,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.InsuranceHistoryDataAsync(partnerId, payload, partnerName);
@@ -352,7 +352,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.LifeStyleDetailsDataAsync(partnerId, payload, partnerName);
@@ -379,7 +379,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.MandateDetailsDataAsync(partnerId, payload, partnerName);
@@ -406,7 +406,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.MinorDetailsDataAsync(partnerId, payload, partnerName);
@@ -433,7 +433,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.NomineeDetailsDataAsync(partnerId, payload, partnerName);
@@ -460,7 +460,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.NRIDetailsDataAsync(partnerId, payload, partnerName);
@@ -487,7 +487,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.OtherInsuranceDataAsync(partnerId, payload, partnerName);
@@ -514,7 +514,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.PartialWithdrawalDataAsync(partnerId, payload, partnerName);
@@ -541,7 +541,7 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.PaymentDetailsDataAsync(partnerId, payload, partnerName);
@@ -567,10 +567,65 @@ namespace PartnerFlowAPI.Controllers
         {
             try
             {
-                // Example: partnerId can be extracted from JWT claims
+
                 int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
                 string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
                 var result = await _partnerDataService.PersonalDetailsDataAsync(partnerId, payload, partnerName);
+
+                if (result.InvalidFields.Any())
+                {
+                    return BadRequest(new
+                    {
+                        Status = "Validation Failed",
+                        InvalidFields = result.InvalidFields
+                    });
+                }
+
+                return Ok(new { Status = "Success", Message = "Data inserted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Status = "Error", Message = ex.Message });
+            }
+        }
+
+
+        [HttpPost("SubmitProductDetailsData")]
+        public async Task<IActionResult> ProductDetailsData([FromBody] Dictionary<string, object> payload)
+        {
+            try
+            {
+
+                int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
+                string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
+                var result = await _partnerDataService.ProductDetailsDataAsync(partnerId, payload, partnerName);
+
+                if (result.InvalidFields.Any())
+                {
+                    return BadRequest(new
+                    {
+                        Status = "Validation Failed",
+                        InvalidFields = result.InvalidFields
+                    });
+                }
+
+                return Ok(new { Status = "Success", Message = "Data inserted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Status = "Error", Message = ex.Message });
+            }
+        }
+
+        [HttpPost("SubmitRiderDetailsData")]
+        public async Task<IActionResult> RiderDetailsData([FromBody] Dictionary<string, object> payload)
+        {
+            try
+            {
+
+                int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
+                string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
+                var result = await _partnerDataService.RiderDetailsDataAsync(partnerId, payload, partnerName);
 
                 if (result.InvalidFields.Any())
                 {
@@ -594,7 +649,7 @@ namespace PartnerFlowAPI.Controllers
         public async Task<IActionResult> SubmitData([FromBody] Dictionary<string, object> payload)
         {
             int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
-            // payload can contain any number of fields or nested objects
+
             var response = await _partnerDataService.SubmitDataAsync(partnerId, payload);
             return Ok(new { message = response });
         }

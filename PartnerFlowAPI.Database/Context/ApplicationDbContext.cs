@@ -48,6 +48,8 @@ namespace PartnerFlowAPI.Database.Context
         public DbSet<tblPF_PaymentDetails> tblPF_PaymentDetails { get; set; }
         public DbSet<tblPF_PersonalDetails> tblPF_PersonalDetails { get; set; }
         public DbSet<Tblpf_SummaryDetails> tblpf_SummaryDetails { get; set; }
+        public DbSet<tblPF_ProductDetails> productDetails { get; set; }
+        public DbSet<tblPF_RiderDetails> riderDetails { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -82,6 +84,8 @@ namespace PartnerFlowAPI.Database.Context
             modelBuilder.ApplyConfiguration(new tblPF_PaymentDetailsConfiguration());
             modelBuilder.ApplyConfiguration(new tblPF_PersonalDetailsConfiguration());
             modelBuilder.ApplyConfiguration(new Tblpf_SummaryDetailsConfiguration());
+            modelBuilder.ApplyConfiguration(new ProductDetailsConfiguration());
+            modelBuilder.ApplyConfiguration(new tblPF_RiderDetailsConfiguration());
         }
     }
 }

@@ -47,14 +47,12 @@ namespace PartnerFlowAPI.Services.Implementation
                     };
                 }
 
-                // Read JWT settings
                 var jwtSettings = _configuration.GetSection("JwtSettings");
                 var secretKey = jwtSettings["SecretKey"] ?? throw new InvalidOperationException("SecretKey is missing");
                 var issuer = jwtSettings["Issuer"];
                 var audience = jwtSettings["Audience"];
                 var expiryMinutes = int.TryParse(jwtSettings["ExpiryMinutes"], out var minutes) ? minutes : 60;
 
-                // Claims for JWT
                 var claims = new[]
                 {
                     new Claim(JwtRegisteredClaimNames.Sub, partner.Code),
@@ -91,8 +89,8 @@ namespace PartnerFlowAPI.Services.Implementation
             {
                 _logger.LogError(ex, "Error occurred during authentication for Code: {Code}", request.Code);
 
-                throw; 
-               
+                throw;
+
             }
         }
     }

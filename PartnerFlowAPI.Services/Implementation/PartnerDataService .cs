@@ -21,19 +21,24 @@ namespace PartnerFlowAPI.Services.Implementation
     {
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PartnerDataService(ApplicationDbContext context, IConfiguration configuration)
+        public PartnerDataService(ApplicationDbContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
             _context = context;
             _configuration = configuration;
+            _httpContextAccessor = httpContextAccessor;
         }
 
         public async Task<ValidationResultModel> ProcessPartnerDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -54,20 +59,20 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -81,14 +86,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -102,7 +107,7 @@ namespace PartnerFlowAPI.Services.Implementation
             {
                 var entity = new tblPartnerSuitability
                 {
-                    //check nul in all the apis wherever green line is visible
+
                     GdSuitabilityId = Guid.NewGuid(),
                     VcJourneyId = GetValueIgnoreCase(dataObject, "journeyID"),
                     VcSalutation = GetValueIgnoreCase(dataObject, "salutation"),
@@ -131,10 +136,10 @@ namespace PartnerFlowAPI.Services.Implementation
                     DcGoalFutureValue = ParseDecimal(GetValueIgnoreCase(dataObject, "goalFutureValue")),
                     VcProductCategory = GetValueIgnoreCase(dataObject, "productCategory"),
                     VcScheme = GetValueIgnoreCase(dataObject, "scheme"),
-                    VcLastAccessIP = "0.0.0.0", // need to get properip
-                    VcCreatedBy = partnerName ?? "system", // partnername
-                    DtCreateDate = DateTime.Now, // everywhere
-                    BitIsDeleted = false
+                    VcLastAccessIP = clientIp,
+                    VcCreatedBy = partnerName ?? "system",
+                    DtCreateDate = DateTime.Now,
+                    BitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "BitIsDeleted")) ?? false
                 };
 
                 _context.partnerSuitabilities.Add(entity);
@@ -149,9 +154,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> AgentDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+               ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+               ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -172,20 +180,20 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -199,14 +207,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -220,6 +228,7 @@ namespace PartnerFlowAPI.Services.Implementation
                                     .Where(p => p.PartnerID == partnerId && !p.IsDeleted)
                                     .Select(p => new { p.ApplicationNumber })
                                     .FirstOrDefaultAsync();
+
 
             if (partnerData == null || string.IsNullOrEmpty(partnerData.ApplicationNumber))
             {
@@ -249,7 +258,7 @@ namespace PartnerFlowAPI.Services.Implementation
                         EmailAddress = GetValueIgnoreCase(dataObject, "EmailAddress"),
                         MasterAgencyCode = GetValueIgnoreCase(dataObject, "MasterAgencyCode"),
                         Title = GetValueIgnoreCase(dataObject, "Title"),
-                        VcLastAccessIp = GetValueIgnoreCase(dataObject, "VcLastAccessIp"),
+                        VcLastAccessIp = clientIp,
                         DtCreateDate = DateTime.Now,
                         VcCreatedBy = partnerName ?? "system",
                         BitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "BitIsDeleted")) ?? false
@@ -262,11 +271,11 @@ namespace PartnerFlowAPI.Services.Implementation
                 }
                 catch (DbUpdateException ex)
                 {
-                    // 🧩 Extract detailed SQL-level info
+
                     var sqlEx = ex.InnerException ?? ex;
                     string message = sqlEx.Message;
 
-                    // 🔍 Log every property value to help find the culprit
+
                     var entityValues = string.Join(Environment.NewLine,
                         _context.Entry(entity).CurrentValues.Properties
                             .Select(p => $"{p.Name}: {_context.Entry(entity).CurrentValues[p] ?? "NULL"}"));
@@ -275,7 +284,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     result.InvalidFields.Add("Database Error while saving Agent Details");
                     result.ErrorMessage = $"Error: {message}\n\nField Values:\n{entityValues}";
 
-                    // Optional: log to file or console for debugging
+
                     Console.WriteLine("❌ Save Error: " + message);
                     Console.WriteLine("⚠️ Entity Values:\n" + entityValues);
                 }
@@ -295,9 +304,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> BankAccountDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+               ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+               ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -318,20 +330,20 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -345,14 +357,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -396,7 +408,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     VcResponseValidity = GetValueIgnoreCase(dataObject, "VcResponseValidity"),
                     VcStatus = GetValueIgnoreCase(dataObject, "VcStatus"),
                     VcErrorDescription = GetValueIgnoreCase(dataObject, "VcErrorDescription"),
-                    VcLastAccessIP = GetValueIgnoreCase(dataObject, "VcLastAccessIP") ?? "0.0.0.0",
+                    VcLastAccessIP = clientIp,
                     VcCreatedBy = partnerName ?? "system",
                     DtCreateDate = DateTime.Now,
                     BitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "BitIsDeleted")) ?? false
@@ -413,9 +425,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> CommunicationDetailstDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+               ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+               ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -436,20 +451,20 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -526,7 +541,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     VcEmailAddress = GetValueIgnoreCase(dataObject, "VcEmailAddress"),
                     BtIsEditable = ParseBool(GetValueIgnoreCase(dataObject, "BtIsEditable")) ?? true,
 
-                    VcLastAccessIP = "0.0.0.0",
+                    VcLastAccessIP = clientIp,
                     VcCreatedBy = partnerName ?? "system",
                     DtCreateDate = DateTime.Now,
                     BitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "BitIsDeleted")) ?? false,
@@ -544,6 +559,9 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> EmploymentDetailstDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+               ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+               ?? "Unknown";
             var invalidFields = new List<string>();
 
             try
@@ -651,11 +669,11 @@ namespace PartnerFlowAPI.Services.Implementation
                         dcInsuranceCover = ParseDecimal(GetValueIgnoreCase(dataObject, "dcInsuranceCover")),
                         dcParentAnnualIncome = ParseDecimal(GetValueIgnoreCase(dataObject, "dcParentAnnualIncome")),
                         dcSiblingsInsuranceCover = ParseDecimal(GetValueIgnoreCase(dataObject, "dcSiblingsInsuranceCover")),
-                        vcLastAccessIP = "0.0.0.0",
+                        vcLastAccessIP = clientIp,
                         vcCreatedBy = partnerName ?? "system",
                         dtCreateDate = DateTime.Now,
                         bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
-                        
+
                     };
 
                     _context.tblPF_EmploymentDetails.Add(entity);
@@ -682,7 +700,7 @@ namespace PartnerFlowAPI.Services.Implementation
             }
             catch (Exception ex)
             {
-                // Top-level safety catch for unexpected logic errors
+
                 result.Success = false;
                 result.InvalidFields.Add("Unexpected Error");
                 result.ErrorMessage = ex.InnerException?.Message ?? ex.Message;
@@ -700,6 +718,9 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> FamilyDetailstDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
             try
@@ -725,19 +746,19 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-                // 2️⃣ Normalize payload
+
                 var normalizedPayload = payload.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
                 );
 
-                // 3️⃣ Flatten if nested JSON exists
+
                 bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
                 JObject dataObject = hasNestedObject
                     ? FlattenJson(JObject.FromObject(normalizedPayload))
                     : JObject.FromObject(normalizedPayload);
 
-                // 4️⃣ Validate each field
+
                 foreach (var prop in dataObject.Properties())
                 {
                     var key = prop.Name.ToLower();
@@ -823,7 +844,7 @@ namespace PartnerFlowAPI.Services.Implementation
                             vcDiagnosis = GetValueIgnoreCase(dataObject, currentField = "vcDiagnosis"),
                             btIsNominee = ParseBool(GetValueIgnoreCase(dataObject, currentField = "btIsNominee")),
                             ftNomineePercentage = (double?)ParseDecimal(GetValueIgnoreCase(dataObject, currentField = "ftNomineePercentage")),
-                            vcLastAccessIP = "0.0.0.0",
+                            vcLastAccessIP = clientIp,
                             vcCreatedBy = partnerName ?? "system",
                             dtCreateDate = DateTime.Now,
                             bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, currentField = "bitIsDeleted")) ?? false
@@ -853,11 +874,14 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> FATCADetailstDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
             try
             {
-                // 1️⃣ Get allowed fields for this partner
+
                 var allowedFields = await _context.PartnerSections
                     .Where(ps => ps.PartnerId == partnerId)
                     .Join(
@@ -878,20 +902,20 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-                // 2️⃣ Normalize payload
+
                 var normalizedPayload = payload.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
                 );
 
-                // 3️⃣ Detect nested JSON
+
                 bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
                 JObject dataObject = hasNestedObject
                     ? FlattenJson(JObject.FromObject(normalizedPayload))
                     : JObject.FromObject(normalizedPayload);
 
-                // 4️⃣ Validate each field
+
                 foreach (var prop in dataObject.Properties())
                 {
                     var key = prop.Name.ToLower();
@@ -905,14 +929,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                     var field = fieldDict[key];
 
-                    // Validate datatype
+
                     if (!IsValidDataType(value, field.DataType))
                     {
                         invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                         continue;
                     }
 
-                    // Validate length
+
                     if (field.Length.HasValue && value?.Length > field.Length)
                     {
                         invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -934,7 +958,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     return result;
                 }
 
-                // 5️⃣ Save only if valid
+
                 if (result.Success)
                 {
                     var entity = new tblpf_FatcaDetails
@@ -947,7 +971,7 @@ namespace PartnerFlowAPI.Services.Implementation
                         vcFatcaValidityOfDocumentaryEvidence = GetValueIgnoreCase(dataObject, "vcFatcaValidityOfDocumentaryEvidence"),
                         vcFatcaTaxResidencyCountry = GetValueIgnoreCase(dataObject, "vcFatcaTaxResidencyCountry"),
                         vcFatcaTINNumberIssuingCountry = GetValueIgnoreCase(dataObject, "vcFatcaTINNumberIssuingCountry"),
-                        vcLastAccessIP = "0.0.0.0",
+                        vcLastAccessIP = clientIp,
                         vcCreatedBy = partnerName ?? "system",
                         dtCreateDate = DateTime.Now,
                         bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
@@ -962,7 +986,7 @@ namespace PartnerFlowAPI.Services.Implementation
                 result.Success = false;
                 result.InvalidFields.Add($"Exception: {ex.Message}");
 
-                // optional: log error
+
                 Console.WriteLine($"[FATCADetailstDataAsync] Error: {ex}");
             }
 
@@ -972,11 +996,14 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> FinancialQuestionDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
             try
             {
-                // 1️⃣ Get allowed fields for this partner
+
                 var allowedFields = await _context.PartnerSections
                     .Where(ps => ps.PartnerId == partnerId)
                     .Join(
@@ -997,13 +1024,13 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-                // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+
                 var normalizedPayload = payload.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
                 );
 
-                // 3️⃣ Detect if nested JSON exists
+
                 bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
                 JObject dataObject = hasNestedObject
@@ -1024,14 +1051,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                     var field = fieldDict[key];
 
-                    // Validate datatype
+
                     if (!IsValidDataType(value, field.DataType))
                     {
                         invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                         continue;
                     }
 
-                    // Validate length
+
                     if (field.Length.HasValue && value?.Length > field.Length)
                     {
                         invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -1119,7 +1146,7 @@ namespace PartnerFlowAPI.Services.Implementation
                             vctotalanualyear2223 = GetValueIgnoreCase(dataObject, "vctotalanualyear2223"),
 
                             vcCreatedBy = partnerName ?? "system",
-                            vcLastAccessIP = "0.0.0.0",
+                            vcLastAccessIP = clientIp,
                             dtCreateDate = DateTime.Now,
                             bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
                         };
@@ -1142,7 +1169,7 @@ namespace PartnerFlowAPI.Services.Implementation
                         result.Success = false;
                         result.InvalidFields.Add($"Database Save Error: {dbEx.Message}");
 
-                        // log full exception
+
                         Console.WriteLine($"[FinancialQuestionDataAsync] Save Error: {dbEx}");
                     }
                 }
@@ -1161,11 +1188,14 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> Form60QuestionDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
             try
             {
-                // 1️⃣ Get allowed fields for this partner
+
                 var allowedFields = await _context.PartnerSections
                     .Where(ps => ps.PartnerId == partnerId)
                     .Join(
@@ -1186,20 +1216,20 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-                // 2️⃣ Normalize payload
+
                 var normalizedPayload = payload.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
                 );
 
-                // 3️⃣ Flatten JSON if nested
+
                 bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
                 JObject dataObject = hasNestedObject
                     ? FlattenJson(JObject.FromObject(normalizedPayload))
                     : JObject.FromObject(normalizedPayload);
 
-                // 4️⃣ Validate each field
+
                 foreach (var prop in dataObject.Properties())
                 {
                     var key = prop.Name.ToLower();
@@ -1213,14 +1243,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                     var field = fieldDict[key];
 
-                    // Validate datatype
+
                     if (!IsValidDataType(value, field.DataType))
                     {
                         invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                         continue;
                     }
 
-                    // Validate length
+
                     if (field.Length.HasValue && value?.Length > field.Length)
                     {
                         invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -1230,7 +1260,7 @@ namespace PartnerFlowAPI.Services.Implementation
                 result.InvalidFields = invalidFields;
                 result.Success = invalidFields.Count == 0;
 
-                // 5️⃣ Get Partner Application Number
+
                 var partnerData = await _context.tblPartnerDatas
                                         .Where(p => p.PartnerID == partnerId && !p.IsDeleted)
                                         .Select(p => new { p.ApplicationNumber })
@@ -1243,7 +1273,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     return result;
                 }
 
-                // 6️⃣ If valid, save entity
+
                 if (result.Success)
                 {
                     var entity = new tblPF_Form60Questions
@@ -1276,9 +1306,9 @@ namespace PartnerFlowAPI.Services.Implementation
                         dtDateOfPanApplication = ParseDateNullable(GetValueIgnoreCase(dataObject, "dtDateOfPanApplication")),
                         vcAcknowledgementNumber = GetValueIgnoreCase(dataObject, "vcAcknowledgementNumber"),
 
-                        // System fields
+
                         vcCreatedBy = partnerName ?? "system",
-                        vcLastAccessIP = "0.0.0.0",
+                        vcLastAccessIP = clientIp,
                         dtCreateDate = DateTime.Now,
                         bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
                     };
@@ -1302,9 +1332,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> HealthConditionDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -1338,7 +1371,7 @@ namespace PartnerFlowAPI.Services.Implementation
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -1352,14 +1385,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -1449,7 +1482,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     btThyroidDisorder = ParseBool(GetValueIgnoreCase(dataObject, "btThyroidDisorder")),
                     vcInvestigationsTreatment = GetValueIgnoreCase(dataObject, "vcInvestigationsTreatment"),
                     vcTreatmentDetails = GetValueIgnoreCase(dataObject, "vcTreatmentDetails"),
-                    vcLastAccessIP = GetValueIgnoreCase(dataObject, "vcLastAccessIP") ?? partnerName ?? "system",
+                    vcLastAccessIP = clientIp,
                     vcCreatedBy = partnerName ?? "system",
                     dtCreateDate = DateTime.Now,
                     vcModifiedBy = GetValueIgnoreCase(dataObject, "vcModifiedBy"),
@@ -1500,6 +1533,9 @@ namespace PartnerFlowAPI.Services.Implementation
      string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
             try
@@ -1525,13 +1561,13 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-                // 2️⃣ Normalize payload (handle JsonElement conversion)
+
                 var normalizedPayload = payload.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
                 );
 
-                // 3️⃣ Detect nested JSON
+
                 bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
                 JObject dataObject = hasNestedObject
                     ? FlattenJson(JObject.FromObject(normalizedPayload))
@@ -1551,14 +1587,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                     var field = fieldDict[key];
 
-                    // Validate datatype
+
                     if (!IsValidDataType(value, field.DataType))
                     {
                         invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                         continue;
                     }
 
-                    // Validate length
+
                     if (field.Length.HasValue && value?.Length > field.Length)
                     {
                         invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -1600,9 +1636,8 @@ namespace PartnerFlowAPI.Services.Implementation
                             vcMedicineDosageDetails = GetValueIgnoreCase(dataObject, "vcMedicineDosageDetails"),
                             vcnameOfTreatingDoctor = GetValueIgnoreCase(dataObject, "vcnameOfTreatingDoctor"),
                             vcCreatedBy = partnerName ?? "system",
-                            vcLastAccessIP = "0.0.0.0",
+                            vcLastAccessIP = clientIp,
                             dtCreateDate = DateTime.Now,
-                            vcModifiedBy = GetValueIgnoreCase(dataObject, "vcModifiedBy"),
                             dtModifiedDate = ParseDate(GetValueIgnoreCase(dataObject, "dtModifiedDate")),
                             dtDeletedDate = ParseDate(GetValueIgnoreCase(dataObject, "dtDeletedDate")),
                             bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false,
@@ -1632,11 +1667,14 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> InsuranceHistoryDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
             try
             {
-                // 1️⃣ Get allowed fields for this partner
+
                 var allowedFields = await _context.PartnerSections
                     .Where(ps => ps.PartnerId == partnerId)
                     .Join(
@@ -1657,20 +1695,20 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-                // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+
                 var normalizedPayload = payload.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
                 );
 
-                // 3️⃣ Detect if nested JSON exists
+
                 bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
                 JObject dataObject = hasNestedObject
                     ? FlattenJson(JObject.FromObject(normalizedPayload))
                     : JObject.FromObject(normalizedPayload);
 
-                // 4️⃣ Validate each field
+
                 foreach (var prop in dataObject.Properties())
                 {
                     var key = prop.Name.ToLower();
@@ -1684,14 +1722,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                     var field = fieldDict[key];
 
-                    // Validate datatype
+
                     if (!IsValidDataType(value, field.DataType))
                     {
                         invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                         continue;
                     }
 
-                    // Validate length
+
                     if (field.Length.HasValue && value?.Length > field.Length)
                     {
                         invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -1732,7 +1770,7 @@ namespace PartnerFlowAPI.Services.Implementation
                         vcYearOfInsurance = GetValueIgnoreCase(dataObject, "vcYearOfInsurance"),
                         intCurrentStatus = ParseInt(GetValueIgnoreCase(dataObject, "intCurrentStatus")),
                         intAcceptanceTerms = ParseInt(GetValueIgnoreCase(dataObject, "intAcceptanceTerms")),
-                        vcLastAccessIP = "0.0.0.0",
+                        vcLastAccessIP = clientIp,
                         vcCreatedBy = partnerName ?? "system",
                         dtCreateDate = DateTime.Now
                     };
@@ -1745,12 +1783,12 @@ namespace PartnerFlowAPI.Services.Implementation
                     }
                     catch (DbUpdateException dbEx)
                     {
-                        // Detect which column caused the null or constraint issue
+
                         var inner = dbEx.InnerException?.Message ?? dbEx.Message;
                         result.Success = false;
                         result.InvalidFields.Add($"Database error while saving InsuranceHistory: {inner}");
 
-                        // Optional: attempt to identify column name from error message
+
                         var match = System.Text.RegularExpressions.Regex.Match(inner, @"column ['""]?(\w+)['""]?");
                         if (match.Success)
                         {
@@ -1774,9 +1812,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> LifeStyleDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -1803,14 +1844,14 @@ namespace PartnerFlowAPI.Services.Implementation
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -1824,14 +1865,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -1956,10 +1997,9 @@ namespace PartnerFlowAPI.Services.Implementation
                     intQuantityCigarCigarettesBeediPaan = ParseInt(GetValueIgnoreCase(dataObject, "intQuantityCigarCigarettesBeediPaan")),
                     intQuantityBeerWineHardLiquor = ParseInt(GetValueIgnoreCase(dataObject, "intQuantityBeerWineHardLiquor")),
                     intQuantityAnyNarcotics = ParseInt(GetValueIgnoreCase(dataObject, "intQuantityAnyNarcotics")),
-                    vcLastAccessIP = "0.0.0.0",
+                    vcLastAccessIP = clientIp,
                     vcCreatedBy = partnerName ?? "system",
                     dtCreateDate = DateTime.Now,
-                    vcModifiedBy = null,
                     dtModifiedDate = null,
                     dtDeletedDate = null
                 };
@@ -1973,9 +2013,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> MandateDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -1996,20 +2039,20 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -2023,14 +2066,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -2126,7 +2169,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     vcToken = GetValueIgnoreCase(dataObject, "vcToken"),
                     vcFactHouse = GetValueIgnoreCase(dataObject, "vcFactHouse"),
                     bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false,
-                    vcLastAccessIP = "0.0.0.0",
+                    vcLastAccessIP = clientIp,
                     vcCreatedBy = partnerName ?? "system",
                     dtCreateDate = DateTime.Now
                 };
@@ -2140,9 +2183,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> MinorDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -2163,20 +2209,20 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -2190,14 +2236,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -2263,7 +2309,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     vcDetailsOfVaccination = GetValueIgnoreCase(dataObject, "vcDetailsOfVaccination"),
                     intAssureType = ParseInt(GetValueIgnoreCase(dataObject, "intAssureType")),
                     vcotherVaccination = GetValueIgnoreCase(dataObject, "vcotherVaccination"),
-                    vcLastAccessIP = "0.0.0.0",
+                    vcLastAccessIP = clientIp,
                     vcCreatedBy = partnerName ?? "system",
                     dtCreateDate = DateTime.Now,
                     bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
@@ -2278,11 +2324,14 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> NomineeDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
             try
             {
-                // 1️⃣ Get allowed fields for this partner
+
                 var allowedFields = await _context.PartnerSections
                     .Where(ps => ps.PartnerId == partnerId)
                     .Join(
@@ -2303,19 +2352,19 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-                // 2️⃣ Normalize payload
+
                 var normalizedPayload = payload.ToDictionary(
                     kvp => kvp.Key,
                     kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
                 );
 
-                // 3️⃣ Flatten JSON
+
                 bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
                 JObject dataObject = hasNestedObject
                     ? FlattenJson(JObject.FromObject(normalizedPayload))
                     : JObject.FromObject(normalizedPayload);
 
-                // 4️⃣ Validate fields
+
                 foreach (var prop in dataObject.Properties())
                 {
                     var key = prop.Name.ToLower();
@@ -2362,7 +2411,7 @@ namespace PartnerFlowAPI.Services.Implementation
 
                     try
                     {
-                        // Dynamically assign each property to detect null/invalid errors
+
                         entity.intAssureType = ParseInt(GetValueIgnoreCase(dataObject, "intAssureType"));
                         entity.intFamilyDetailsId = ParseInt(GetValueIgnoreCase(dataObject, "intFamilyDetailsId"));
                         entity.vcRelation = GetValueIgnoreCase(dataObject, "vcRelation");
@@ -2416,7 +2465,7 @@ namespace PartnerFlowAPI.Services.Implementation
                         entity.intAppointeeDeDupeStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAppointeeDeDupeStatus")) ?? 0;
                         entity.intAppointeeImageQCStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAppointeeImageQCStatus")) ?? 0;
                         entity.intAppointeeDocQCStatus = ParseInt(GetValueIgnoreCase(dataObject, "intAppointeeDocQCStatus")) ?? 0;
-                        entity.vcLastAccessIP = "0.0.0.0";
+                        entity.vcLastAccessIP = clientIp;
                         entity.vcCreatedBy = partnerName ?? "system";
                         entity.dtCreateDate = DateTime.Now;
                         entity.bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false;
@@ -2426,7 +2475,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     }
                     catch (Exception ex)
                     {
-                        // Identify which property caused the exception
+
                         result.Success = false;
                         result.InvalidFields.Add($"Error saving NomineeDetails: {ex.Message}");
                     }
@@ -2445,6 +2494,9 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> NRIDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
             // 1️⃣ Get allowed fields for this partner
@@ -2468,13 +2520,13 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
@@ -2495,14 +2547,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -2573,7 +2625,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     vcDispatchpincode = GetValueIgnoreCase(dataObject, "vcDispatchpincode"),
                     vcPaymentmanner = GetValueIgnoreCase(dataObject, "vcPaymentmanner"),
                     vcEcsEnterBankName = GetValueIgnoreCase(dataObject, "vcEcsEnterBankName"),
-                    vcLastAccessIP = "0.0.0.0",
+                    vcLastAccessIP = clientIp,
                     vcCreatedBy = partnerName ?? "system",
                     dtCreateDate = DateTime.Now,
                     bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
@@ -2587,9 +2639,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> OtherInsuranceDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -2616,14 +2671,14 @@ namespace PartnerFlowAPI.Services.Implementation
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -2637,14 +2692,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -2683,10 +2738,9 @@ namespace PartnerFlowAPI.Services.Implementation
                     vcStandardAcceptance = GetValueIgnoreCase(dataObject, "vcStandardAcceptance"),
                     dtProposalDate = ParseDate(GetValueIgnoreCase(dataObject, "dtProposalDate")),
                     vcTypeofpolicyterm = GetValueIgnoreCase(dataObject, "vcTypeofpolicyterm"),
-                    vcLastAccessIP = "0.0.0.0",
+                    vcLastAccessIP = clientIp,
                     vcCreatedBy = partnerName ?? "system",
                     dtCreateDate = DateTime.Now,
-                    vcModifiedBy = null,
                     dtModifiedDate = null,
                     dtDeletedDate = null,
                     bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
@@ -2702,9 +2756,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> PartialWithdrawalDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -2725,20 +2782,20 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -2752,14 +2809,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -2792,10 +2849,9 @@ namespace PartnerFlowAPI.Services.Implementation
                     dtWithdrawalStartDate = ParseDate(GetValueIgnoreCase(dataObject, "dtWithdrawalStartDate")),
                     dcWithdrawalMonthlyAmount = ParseDecimal(GetValueIgnoreCase(dataObject, "dcWithdrawalMonthlyAmount")),
                     intWithdrawalNumber = ParseInt(GetValueIgnoreCase(dataObject, "intWithdrawalNumber")) ?? 0,
-                    vcLastAccessIP = "0.0.0.0",
+                    vcLastAccessIP = clientIp,
                     vcCreatedBy = partnerName ?? "system",
                     dtCreateDate = DateTime.Now,
-                    vcModifiedBy = null,
                     dtModifiedDate = null,
                     dtDeletedDate = null,
                     bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
@@ -2810,9 +2866,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> PaymentDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -2839,14 +2898,14 @@ namespace PartnerFlowAPI.Services.Implementation
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -2860,14 +2919,14 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-                // Validate datatype
+
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
                     continue;
                 }
 
-                // Validate length
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -2953,10 +3012,9 @@ namespace PartnerFlowAPI.Services.Implementation
                     vcReferenceNumber = GetValueIgnoreCase(dataObject, "vcReferenceNumber"),
                     vcPGReferenceNo = GetValueIgnoreCase(dataObject, "vcPGReferenceNo"),
                     vcInternalTransactionID = GetValueIgnoreCase(dataObject, "vcInternalTransactionID"),
-                    vcLastAccessIP = "0.0.0.0",
+                    vcLastAccessIP = clientIp,
                     vcCreatedBy = partnerName ?? "system",
                     dtCreateDate = DateTime.Now,
-                    vcModifiedBy = null,
                     dtModifiedDate = null,
                     dtDeletedDate = null,
                     bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
@@ -2971,9 +3029,12 @@ namespace PartnerFlowAPI.Services.Implementation
         public async Task<ValidationResultModel> PersonalDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
         {
             var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -2994,19 +3055,19 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload
+
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Handle nested JSON
+
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Field validation
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -3097,17 +3158,16 @@ namespace PartnerFlowAPI.Services.Implementation
                         vcIncomeEstimator = GetValueIgnoreCase(dataObject, "vcIncomeEstimator"),
                         vcIIBScore = GetValueIgnoreCase(dataObject, "vcIIBScore"),
                         vcDedupeMode = GetValueIgnoreCase(dataObject, "vcDedupeMode"),
-                        vcLastAccessIP = "0.0.0.0",
+                        vcLastAccessIP = clientIp,
                         vcCreatedBy = partnerName ?? "system",
                         dtCreateDate = DateTime.Now,
-                        vcModifiedBy = null,
                         dtModifiedDate = null,
                         dtDeletedDate = null,
                         bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false,
-                        intDeDupeStatus = 0,
+                        intDeDupeStatus = ParseInt(GetValueIgnoreCase(dataObject, "intDeDupeStatus")) ?? 0,
                         intImageQCStatus = 0,
                         intDocQCStatus = 0
-                        
+
                     };
 
                     _context.tblPF_PersonalDetails.Add(entity);
@@ -3115,7 +3175,7 @@ namespace PartnerFlowAPI.Services.Implementation
                 }
                 catch (Exception ex)
                 {
-                    // 🔍 Log detailed info about failing fields
+
                     var fieldValues = string.Join(Environment.NewLine,
                         dataObject.Properties().Select(p =>
                             $"{p.Name}: {(p.Value?.Type == JTokenType.Null ? "NULL" : p.Value?.ToString())}"
@@ -3132,17 +3192,566 @@ namespace PartnerFlowAPI.Services.Implementation
         }
 
 
+        public async Task<ValidationResultModel> ProductDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
+        {
+            var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
+            var invalidFields = new List<string>();
+
+
+            var allowedFields = await _context.PartnerSections
+                .Where(ps => ps.PartnerId == partnerId)
+                .Join(
+                    _context.SectionFields.Include(sf => sf.Field),
+                    ps => ps.SectionId,
+                    sf => sf.SectionId,
+                    (ps, sf) => sf.Field
+                )
+                .Where(f => !f.IsDeleted)
+                .Select(f => new FieldDefinition
+                {
+                    FieldName = f.FieldName,
+                    DataType = f.DataType,
+                    Length = f.Length
+                })
+                .Distinct()
+                .ToListAsync();
+
+            var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
+
+
+            var normalizedPayload = payload.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
+            );
+
+
+            bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
+            JObject dataObject = hasNestedObject
+                ? FlattenJson(JObject.FromObject(normalizedPayload))
+                : JObject.FromObject(normalizedPayload);
+
+
+            foreach (var prop in dataObject.Properties())
+            {
+                var key = prop.Name.ToLower();
+                var value = prop.Value?.Type == JTokenType.Null ? null : prop.Value?.ToString();
+
+                if (!fieldDict.ContainsKey(key))
+                {
+                    invalidFields.Add($"{prop.Name} (Field Not Configured)");
+                    continue;
+                }
+
+                var field = fieldDict[key];
+
+                if (!IsValidDataType(value, field.DataType))
+                {
+                    invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
+                    continue;
+                }
+
+                if (field.Length.HasValue && value?.Length > field.Length)
+                {
+                    invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
+                }
+            }
+
+            result.InvalidFields = invalidFields;
+            result.Success = invalidFields.Count == 0;
+
+            var partnerData = await _context.tblPartnerDatas
+                                    .Where(p => p.PartnerID == partnerId && !p.IsDeleted)
+                                    .Select(p => new { p.ApplicationNumber })
+                                    .FirstOrDefaultAsync();
+
+            if (partnerData == null || string.IsNullOrEmpty(partnerData.ApplicationNumber))
+            {
+                result.Success = false;
+                result.InvalidFields.Add("ApplicationNumber (Not Found for given PartnerId)");
+                return result;
+            }
+
+            if (result.Success)
+            {
+                try
+                {
+                    var entity = new tblPF_ProductDetails
+                    {
+                        vcApplicationNumber = partnerData.ApplicationNumber,
+
+                        vcProductCode = GetValueIgnoreCase(dataObject, "vcProductCode"),
+                        vcRiderProductId = GetValueIgnoreCase(dataObject, "vcRiderProductId"),
+                        vcFGProductCode = GetValueIgnoreCase(dataObject, "vcFGProductCode"),
+                        vcProductType = GetValueIgnoreCase(dataObject, "vcProductType"),
+                        vcProductName = GetValueIgnoreCase(dataObject, "vcProductName"),
+                        vcOptionWithinProductRider = GetValueIgnoreCase(dataObject, "vcOptionWithinProductRider"),
+                        vcBIPdfPath = GetValueIgnoreCase(dataObject, "vcBIPdfPath"),
+
+                        dcModalPremium = ParseDecimal(GetValueIgnoreCase(dataObject, "dcModalPremium")),
+                        dcSumAssured = ParseDecimal(GetValueIgnoreCase(dataObject, "dcSumAssured")),
+                        dcTotalPremium = ParseDecimal(GetValueIgnoreCase(dataObject, "dcTotalPremium")),
+                        dcAnnualizedPremium = ParseDecimal(GetValueIgnoreCase(dataObject, "dcAnnualizedPremium")),
+                        dcTax = ParseDecimal(GetValueIgnoreCase(dataObject, "dcTax")),
+                        dcTax1 = ParseDecimal(GetValueIgnoreCase(dataObject, "dcTax1")),
+
+                        intPT = ParseInt(GetValueIgnoreCase(dataObject, "intPT")) ?? 0,
+                        intPPT = ParseInt(GetValueIgnoreCase(dataObject, "intPPT")) ?? 0,
+
+                        vcMode = GetValueIgnoreCase(dataObject, "vcMode"),
+                        vcSourceChannel = GetValueIgnoreCase(dataObject, "vcSourceChannel"),
+                        vcGroupStaff = GetValueIgnoreCase(dataObject, "vcGroupStaff"),
+                        vcOptions = GetValueIgnoreCase(dataObject, "vcOptions"),
+
+                        btPensionProduct = ParseBool(GetValueIgnoreCase(dataObject, "btPensionProduct")),
+                        ftPercentageToRecieve = ParseDouble(GetValueIgnoreCase(dataObject, "ftPercentageToRecieve")),
+
+                        vcAnnuityThrough = GetValueIgnoreCase(dataObject, "vcAnnuityThrough"),
+                        vcPensionFrequency = GetValueIgnoreCase(dataObject, "vcPensionFrequency"),
+                        btWishToSurrender = ParseBool(GetValueIgnoreCase(dataObject, "btWishToSurrender")),
+                        vcSurrenderAnnuityThrough = GetValueIgnoreCase(dataObject, "vcSurrenderAnnuityThrough"),
+                        vcPensionSurrenderFrequency = GetValueIgnoreCase(dataObject, "vcPensionSurrenderFrequency"),
+
+                        btIsTraditionalPlan = ParseBool(GetValueIgnoreCase(dataObject, "btIsTraditionalPlan")),
+                        dtTraditionalDesireDate = ParseDate(GetValueIgnoreCase(dataObject, "dtTraditionalDesireDate")),
+                        btIsUnitLinkedIndurance = ParseBool(GetValueIgnoreCase(dataObject, "btIsUnitLinkedIndurance")),
+
+                        ftFutureSecurePercentage = ParseDouble(GetValueIgnoreCase(dataObject, "ftFutureSecurePercentage")),
+                        ftFutureIncomePercentage = ParseDouble(GetValueIgnoreCase(dataObject, "ftFutureIncomePercentage")),
+                        ftFutureMidcapPercentage = ParseDouble(GetValueIgnoreCase(dataObject, "ftFutureMidcapPercentage")),
+                        ftFutureBalancePercentage = ParseDouble(GetValueIgnoreCase(dataObject, "ftFutureBalancePercentage")),
+                        ftFutureApexPercentage = ParseDouble(GetValueIgnoreCase(dataObject, "ftFutureApexPercentage")),
+                        ftFutureOpportunityPercentage = ParseDouble(GetValueIgnoreCase(dataObject, "ftFutureOpportunityPercentage")),
+                        ftFutureMaximisePercentage = ParseDouble(GetValueIgnoreCase(dataObject, "ftFutureMaximisePercentage")),
+
+                        intPayoutTerm = ParseInt(GetValueIgnoreCase(dataObject, "intPayoutTerm")),
+                        intPremiumPayingTerm = ParseInt(GetValueIgnoreCase(dataObject, "intPremiumPayingTerm")),
+                        dcInstallmentPremiumWithTaxes = ParseDecimal(GetValueIgnoreCase(dataObject, "dcInstallmentPremiumWithTaxes")),
+                        intPolicyTerm = ParseInt(GetValueIgnoreCase(dataObject, "intPolicyTerm")),
+                        dcMonthlyIncome = ParseDecimal(GetValueIgnoreCase(dataObject, "dcMonthlyIncome")),
+
+                        vcNoOfYears = GetValueIgnoreCase(dataObject, "vcNoOfYears"),
+                        vcAssignmentType = GetValueIgnoreCase(dataObject, "vcAssignmentType"),
+                        vcUIN = GetValueIgnoreCase(dataObject, "vcUIN"),
+                        vcPayoutFrequency = GetValueIgnoreCase(dataObject, "vcPayoutFrequency"),
+                        vcProductCategory = GetValueIgnoreCase(dataObject, "vcProductCategory"),
+                        ftLumpsumPercentage = ParseDouble(GetValueIgnoreCase(dataObject, "ftLumpsumPercentage")),
+                        vcPayOutOptions = GetValueIgnoreCase(dataObject, "vcPayOutOptions"),
+                        VcAccidentalDeathSumAssured = GetValueIgnoreCase(dataObject, "VcAccidentalDeathSumAssured"),
+                        VcIncomeOption = GetValueIgnoreCase(dataObject, "VcIncomeOption"),
+                        vcDeathBenefit = GetValueIgnoreCase(dataObject, "vcDeathBenefit"),
+                        ftIncomeSpackFund = ParseDouble(GetValueIgnoreCase(dataObject, "ftIncomeSpackFund")),
+                        ftIncomePlusFund = ParseDouble(GetValueIgnoreCase(dataObject, "ftIncomePlusFund")),
+                        ftMultiCapEquityFund = ParseDouble(GetValueIgnoreCase(dataObject, "ftMultiCapEquityFund")),
+                        vcInBuildRider = GetValueIgnoreCase(dataObject, "vcInBuildRider"),
+                        vcFundStrategy = GetValueIgnoreCase(dataObject, "vcFundStrategy"),
+
+                        dcBaseModalPremium = ParseDecimal(GetValueIgnoreCase(dataObject, "dcBaseModalPremium")),
+                        dcBaseModalPremiumWGst = ParseDecimal(GetValueIgnoreCase(dataObject, "dcBaseModalPremiumWGst")),
+                        dcRiderModalPremium = ParseDecimal(GetValueIgnoreCase(dataObject, "dcRiderModalPremium")),
+                        dcRiderModalPremiumWGst = ParseDecimal(GetValueIgnoreCase(dataObject, "dcRiderModalPremiumWGst")),
+
+                        vcLumpsumMaturityBenefit = GetValueIgnoreCase(dataObject, "vcLumpsumMaturityBenefit"),
+                        vcDeathBenifitPayout = GetValueIgnoreCase(dataObject, "vcDeathBenifitPayout"),
+                        dcDeathBenefitAmount = ParseDecimal(GetValueIgnoreCase(dataObject, "dcDeathBenefitAmount")),
+                        dcEMRMortality = ParseDecimal(GetValueIgnoreCase(dataObject, "dcEMRMortality")),
+                        dcRateAdjustment = ParseDecimal(GetValueIgnoreCase(dataObject, "dcRateAdjustment")),
+                        dcInstPrem = ParseDecimal(GetValueIgnoreCase(dataObject, "dcInstPrem")),
+                        dcZlinstPrem = ParseDecimal(GetValueIgnoreCase(dataObject, "dcZlinstPrem")),
+
+                        intOPTCREATE = ParseInt(GetValueIgnoreCase(dataObject, "intOPTCREATE")),
+                        intStatisticalCodeCreateStatus = ParseInt(GetValueIgnoreCase(dataObject, "intStatisticalCodeCreateStatus")),
+                        intSCPCREATEStatus = ParseInt(GetValueIgnoreCase(dataObject, "intSCPCREATEStatus")),
+                        intProposalAdditionalDetailsCreateStatus = ParseInt(GetValueIgnoreCase(dataObject, "intProposalAdditionalDetailsCreateStatus")),
+                        intCWDCreateStatus = ParseInt(GetValueIgnoreCase(dataObject, "intCWDCreateStatus")),
+                        ftIncomeSparkFund = ParseDouble(GetValueIgnoreCase(dataObject, "ftIncomeSparkFund")),
+                        vcEMRLoading = GetValueIgnoreCase(dataObject, "vcEMRLoading"),
+                        intLifeGoal = ParseInt(GetValueIgnoreCase(dataObject, "intLifeGoal")),
+
+                        vcLastAccessIP = clientIp,
+                        vcCreatedBy = partnerName ?? "system",
+                        dtCreateDate = DateTime.Now,
+                        dtModifiedDate = null,
+                        dtDeletedDate = null,
+                        bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
+                    };
+
+
+                    _context.productDetails.Add(entity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+
+                    var fieldValues = string.Join(Environment.NewLine,
+                        dataObject.Properties().Select(p =>
+                            $"{p.Name}: {(p.Value?.Type == JTokenType.Null ? "NULL" : p.Value?.ToString())}"
+                        ));
+
+                    result.Success = false;
+                    result.InvalidFields.Add($"❌ Exception: {ex.Message}");
+                    result.InvalidFields.Add($"🔍 StackTrace: {ex.StackTrace}");
+                    result.InvalidFields.Add($"🧾 Payload Values:\n{fieldValues}");
+                }
+            }
+
+            return result;
+        }
+
+        public async Task<ValidationResultModel> RiderDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
+        {
+            var result = new ValidationResultModel();
+            var clientIp = _httpContextAccessor.HttpContext?.Items["ClientIpAddress"]?.ToString()
+              ?? _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString()
+              ?? "Unknown";
+            var invalidFields = new List<string>();
+
+
+            var allowedFields = await _context.PartnerSections
+                .Where(ps => ps.PartnerId == partnerId)
+                .Join(
+                    _context.SectionFields.Include(sf => sf.Field),
+                    ps => ps.SectionId,
+                    sf => sf.SectionId,
+                    (ps, sf) => sf.Field
+                )
+                .Where(f => !f.IsDeleted)
+                .Select(f => new FieldDefinition
+                {
+                    FieldName = f.FieldName,
+                    DataType = f.DataType,
+                    Length = f.Length
+                })
+                .Distinct()
+                .ToListAsync();
+
+            var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
+
+
+            var normalizedPayload = payload.ToDictionary(
+                kvp => kvp.Key,
+                kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
+            );
+
+
+            bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
+            JObject dataObject = hasNestedObject
+                ? FlattenJson(JObject.FromObject(normalizedPayload))
+                : JObject.FromObject(normalizedPayload);
+
+
+            foreach (var prop in dataObject.Properties())
+            {
+                var key = prop.Name.ToLower();
+                var value = prop.Value?.Type == JTokenType.Null ? null : prop.Value?.ToString();
+
+                if (!fieldDict.ContainsKey(key))
+                {
+                    invalidFields.Add($"{prop.Name} (Field Not Configured)");
+                    continue;
+                }
+
+                var field = fieldDict[key];
+
+                if (!IsValidDataType(value, field.DataType))
+                {
+                    invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
+                    continue;
+                }
+
+                if (field.Length.HasValue && value?.Length > field.Length)
+                {
+                    invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
+                }
+            }
+
+            result.InvalidFields = invalidFields;
+            result.Success = invalidFields.Count == 0;
+
+            var partnerData = await _context.tblPartnerDatas
+                                    .Where(p => p.PartnerID == partnerId && !p.IsDeleted)
+                                    .Select(p => new { p.ApplicationNumber })
+                                    .FirstOrDefaultAsync();
+
+            if (partnerData == null || string.IsNullOrEmpty(partnerData.ApplicationNumber))
+            {
+                result.Success = false;
+                result.InvalidFields.Add("ApplicationNumber (Not Found for given PartnerId)");
+                return result;
+            }
+
+            if (result.Success)
+            {
+                try
+                {
+                    var entity = new tblPF_RiderDetails
+                    {
+                        vcApplicationNumber = partnerData.ApplicationNumber,
+                        vcQuotationId = GetValueIgnoreCase(dataObject, "vcQuotationId"),
+                        vcRiderType = GetValueIgnoreCase(dataObject, "vcRiderType"),
+                        vcProductCode = GetValueIgnoreCase(dataObject, "vcProductCode"),
+                        vcRiderCode = GetValueIgnoreCase(dataObject, "vcRiderCode"),
+                        vcProductName = GetValueIgnoreCase(dataObject, "vcProductName"),
+                        vcRiderName = GetValueIgnoreCase(dataObject, "vcRiderName"),
+                        dcModalPremium = ParseDecimal(GetValueIgnoreCase(dataObject, "dcModalPremium")),
+                        dcSumAssured = ParseDecimal(GetValueIgnoreCase(dataObject, "dcSumAssured")),
+                        dcTotalPremium = ParseDecimal(GetValueIgnoreCase(dataObject, "dcTotalPremium")),
+                        dcAnnualizedPremium = ParseDecimal(GetValueIgnoreCase(dataObject, "dcAnnualizedPremium")),
+                        dcTax = ParseDecimal(GetValueIgnoreCase(dataObject, "dcTax")),
+                        intPT = ParseInt(GetValueIgnoreCase(dataObject, "intPT")) ?? 0,
+                        intPPT = ParseInt(GetValueIgnoreCase(dataObject, "intPPT")) ?? 0,
+                        vcMode = GetValueIgnoreCase(dataObject, "vcMode"),
+                        vcUIN = GetValueIgnoreCase(dataObject, "vcUIN"),
+                        vcReturnOfPremium = GetValueIgnoreCase(dataObject, "vcReturnOfPremium"),
+                        vcBenefitTypePayout = GetValueIgnoreCase(dataObject, "vcBenefitTypePayout"),
+                        vcIncomeFrequency = GetValueIgnoreCase(dataObject, "vcIncomeFrequency"),
+                        vcIncomeDuration = GetValueIgnoreCase(dataObject, "vcIncomeDuration"),
+                        vcLumpSumBenefit = GetValueIgnoreCase(dataObject, "vcLumpSumBenefit"),
+                        vcRiderOption = GetValueIgnoreCase(dataObject, "vcRiderOption"),
+                        intRiderCreateStatus = ParseInt(GetValueIgnoreCase(dataObject, "intRiderCreateStatus")) ?? 0,
+
+                        vcLastAccessIP = clientIp,
+                        vcCreatedBy = partnerName ?? "system",
+                        dtCreateDate = DateTime.Now,
+                        vcModifiedBy = null,
+                        dtModifiedDate = null,
+                        dtDeletedDate = null,
+                        bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
+                    };
+
+
+                    _context.riderDetails.Add(entity);
+                    await _context.SaveChangesAsync();
+                }
+                catch (Exception ex)
+                {
+
+                    var fieldValues = string.Join(Environment.NewLine,
+                        dataObject.Properties().Select(p =>
+                            $"{p.Name}: {(p.Value?.Type == JTokenType.Null ? "NULL" : p.Value?.ToString())}"
+                        ));
+
+                    result.Success = false;
+                    result.InvalidFields.Add($"❌ Exception: {ex.Message}");
+                    result.InvalidFields.Add($"🔍 StackTrace: {ex.StackTrace}");
+                    result.InvalidFields.Add($"🧾 Payload Values:\n{fieldValues}");
+                }
+            }
+
+            return result;
+        }
+
         public async Task<string> SubmitDataAsync(int partnerId, Dictionary<string, object> payload)
         {
-            
-            await Task.Delay(10);
+            // Get EF execution strategy (for retry + transaction safety)
+            var strategy = _context.Database.CreateExecutionStrategy();
 
-         
-            return "Data Inserted Successfully";
+            return await strategy.ExecuteAsync(async () =>
+            {
+                // Create transaction *inside* the strategy scope
+                await using var transaction = await _context.Database.BeginTransactionAsync();
+                try
+                {
+                    // 🔹 Get partner name
+                    var partnerName = await _context.Partners
+                        .Where(p => p.PartnerID == partnerId)
+                        .Select(p => p.Name)
+                        .FirstOrDefaultAsync() ?? "system";
+
+                    // 🔹 Get assigned sections for partner
+                    var assignedSections = await _context.PartnerSections
+                        .Where(ps => ps.PartnerId == partnerId)
+                        .Join(_context.Sections,
+                              ps => ps.SectionId,
+                              s => s.SectionId,
+                              (ps, s) => new { s.SectionId, s.SectionName })
+                        .OrderBy(x => x.SectionId)
+                        .ToListAsync();
+
+                    // 🔹 Helper for normalization
+                    string Normalize(string? s)
+                    {
+                        if (string.IsNullOrWhiteSpace(s)) return string.Empty;
+                        var norm = new string(s.ToLowerInvariant().Where(char.IsLetterOrDigit).ToArray());
+                        return norm;
+                    }
+
+                    var payloadSections = new HashSet<string>(
+                        payload.Keys.Select(Normalize),
+                        StringComparer.OrdinalIgnoreCase
+                    );
+
+                    var missingSections = assignedSections
+                        .Where(s => !payloadSections.Contains(Normalize(s.SectionName)))
+                        .Select(s => s.SectionName)
+                        .ToList();
+
+                    if (missingSections.Any())
+                    {
+                        await transaction.RollbackAsync();
+                        return $"❌ Missing required sections: {string.Join(", ", missingSections)}. No data has been saved.";
+                    }
+
+                    var results = new List<string>();
+                    var successfulSections = new List<string>();
+
+                    foreach (var section in assignedSections)
+                    {
+                        var normalized = Normalize(section.SectionName);
+                        ValidationResultModel res;
+
+                        try
+                        {
+                            switch (normalized)
+                            {
+                                case var s when s == Normalize("PartnerSutaibility"):
+                                    res = await ProcessPartnerDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("AgentDetails"):
+                                    res = await AgentDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("BankAccountDetails"):
+                                    res = await BankAccountDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("CommunicationDetails"):
+                                    res = await CommunicationDetailstDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("EmploymentDetails"):
+                                    res = await EmploymentDetailstDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("FamilyDetails"):
+                                    res = await FamilyDetailstDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("FATCADetails"):
+                                    res = await FATCADetailstDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("FinancialQuestion"):
+                                    res = await FinancialQuestionDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("Form60Questions"):
+                                    res = await Form60QuestionDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("HealthCondition"):
+                                    res = await HealthConditionDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("HealthConditionDetails"):
+                                    res = await HealthConditionDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("InsuranceHistory"):
+                                    res = await InsuranceHistoryDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("LifeStyleDetails"):
+                                    res = await LifeStyleDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("MandateDetails"):
+                                    res = await MandateDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("MinorDetails"):
+                                    res = await MinorDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("NomineeDetails"):
+                                    res = await NomineeDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("NRIDetails"):
+                                    res = await NRIDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("OtherInsurances"):
+                                    res = await OtherInsuranceDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("PartialWithdrawal"):
+                                    res = await PartialWithdrawalDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("PaymentDetails"):
+                                    res = await PaymentDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                case var s when s == Normalize("PersonalDetails"):
+                                    res = await PersonalDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
+
+                                default:
+                                    results.Add($"{section.SectionName}: Not implemented");
+                                    continue;
+                            }
+
+                            if (res.Success)
+                            {
+                                successfulSections.Add(section.SectionName);
+                                results.Add($"{section.SectionName}: ✅ success");
+                            }
+                            else
+                            {
+                                await transaction.RollbackAsync();
+                                return $"❌ {section.SectionName} failed validation: {string.Join(", ", res.InvalidFields ?? new List<string>())}";
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            await transaction.RollbackAsync();
+                            return $"❌ Error processing section '{section.SectionName}': {ex.Message}";
+                        }
+                    }
+
+                    // Commit transaction if all sections succeeded
+                    await transaction.CommitAsync();
+
+                    // 🔹 Insert Summary Details
+                    var partnerData = await _context.tblPartnerDatas
+                        .Where(p => p.PartnerID == partnerId && !p.IsDeleted)
+                        .Select(p => new { p.ApplicationNumber })
+                        .FirstOrDefaultAsync();
+
+                    string clientIp = _httpContextAccessor.HttpContext?.Connection?.RemoteIpAddress?.ToString() ?? "Unknown";
+
+                    var summary = new Tblpf_SummaryDetails
+                    {
+                        vcApplicationNumber = partnerData?.ApplicationNumber ?? "UnknownApp",
+                        vcSummary = string.Join(", ", successfulSections),
+                        vcLastAccessIP = clientIp,
+                        vcCreatedBy = partnerName,
+                        dtCreateDate = DateTime.Now,
+                        bitIsDeleted = false
+                    };
+
+                    _context.tblpf_SummaryDetails.Add(summary);
+                    await _context.SaveChangesAsync();
+
+                    return $"✅ All sections processed successfully: {string.Join(", ", successfulSections)}";
+                }
+                catch (Exception ex)
+                {
+                    await transaction.RollbackAsync();
+                    return $"❌ Fatal error: {ex.Message}";
+                }
+            });
         }
 
 
-        // ✅ Converts JsonElement to normal .NET values
+
+
+
+
         private object GetJsonElementValue(JsonElement element)
         {
             return element.ValueKind switch
@@ -3166,7 +3775,7 @@ namespace PartnerFlowAPI.Services.Implementation
         private bool IsValidDataType(string value, string dataType)
         {
             if (value == null)
-                return true; // Allow nulls — handled elsewhere
+                return true;
 
             switch (dataType.ToLower())
             {
@@ -3188,7 +3797,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     return DateTime.TryParse(value, out _);
 
                 case "date":
-                    // Validate only date part (ignore time)
+
                     return DateTime.TryParse(value, out var dt) && dt.TimeOfDay == TimeSpan.Zero;
 
                 case "char":
@@ -3201,7 +3810,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     return true;
 
                 default:
-                    return true; // Fallback: treat as valid for unknown types
+                    return true;
             }
         }
 

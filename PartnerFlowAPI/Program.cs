@@ -8,7 +8,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add controllers + views
 builder.Services.AddControllersWithViews();
-
+builder.Services.AddHttpContextAccessor();
 // Add Output Cache (must be registered before building the app)
 builder.Services.AddOutputCache();
 

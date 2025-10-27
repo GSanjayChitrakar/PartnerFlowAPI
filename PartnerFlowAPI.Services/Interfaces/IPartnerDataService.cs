@@ -33,7 +33,8 @@ namespace PartnerFlowAPI.Services.Interfaces
         Task<ValidationResultModel> PartialWithdrawalDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName);
         Task<ValidationResultModel> PaymentDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName);
         Task<ValidationResultModel> PersonalDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName);
-
+        Task<ValidationResultModel> ProductDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName);
+        Task<ValidationResultModel> RiderDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName);
         Task<string> SubmitDataAsync(int partnerId, Dictionary<string, object> payload);
     }
 }

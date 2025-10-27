@@ -77,7 +77,6 @@ namespace PartnerFlowAPI.Database.Configuration
                    .IsUnicode(true);
 
             builder.Property(a => a.IpAddress)
-                .HasMaxLength(50)
                 .HasColumnName("IpAddress");
 
             builder.Property(a => a.ClientIp)
