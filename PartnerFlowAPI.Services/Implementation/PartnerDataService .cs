@@ -3545,22 +3545,22 @@ namespace PartnerFlowAPI.Services.Implementation
 
         public async Task<string> SubmitDataAsync(int partnerId, Dictionary<string, object> payload)
         {
-            // Get EF execution strategy (for retry + transaction safety)
+            
             var strategy = _context.Database.CreateExecutionStrategy();
 
             return await strategy.ExecuteAsync(async () =>
             {
-                // Create transaction *inside* the strategy scope
+               
                 await using var transaction = await _context.Database.BeginTransactionAsync();
                 try
                 {
-                    // 🔹 Get partner name
+                    
                     var partnerName = await _context.Partners
                         .Where(p => p.PartnerID == partnerId)
                         .Select(p => p.Name)
                         .FirstOrDefaultAsync() ?? "system";
 
-                    // 🔹 Get assigned sections for partner
+                   
                     var assignedSections = await _context.PartnerSections
                         .Where(ps => ps.PartnerId == partnerId)
                         .Join(_context.Sections,
@@ -3570,7 +3570,7 @@ namespace PartnerFlowAPI.Services.Implementation
                         .OrderBy(x => x.SectionId)
                         .ToListAsync();
 
-                    // 🔹 Helper for normalization
+                   
                     string Normalize(string? s)
                     {
                         if (string.IsNullOrWhiteSpace(s)) return string.Empty;
@@ -3713,10 +3713,10 @@ namespace PartnerFlowAPI.Services.Implementation
                         }
                     }
 
-                    // Commit transaction if all sections succeeded
+                   
                     await transaction.CommitAsync();
 
-                    // 🔹 Insert Summary Details
+                   
                     var partnerData = await _context.tblPartnerDatas
                         .Where(p => p.PartnerID == partnerId && !p.IsDeleted)
                         .Select(p => new { p.ApplicationNumber })
