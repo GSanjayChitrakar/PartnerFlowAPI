@@ -3689,6 +3689,12 @@ namespace PartnerFlowAPI.Services.Implementation
                                 case var s when s == Normalize("PersonalDetails"):
                                     res = await PersonalDetailsDataAsync(partnerId, payload, partnerName);
                                     break;
+                                case var s when s == Normalize("ProductDetails"):
+                                    res = await ProductDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
+                                case var s when s == Normalize("RiderDetails"):
+                                    res = await RiderDetailsDataAsync(partnerId, payload, partnerName);
+                                    break;
 
                                 default:
                                     results.Add($"{section.SectionName}: Not implemented");

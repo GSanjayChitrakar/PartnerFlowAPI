@@ -1,15 +1,15 @@
 ﻿using Microsoft.AspNetCore.RateLimiting;
 using PartnerFlowAPI.Api;
 using PartnerFlowAPI.Api.Middleware;
+using PartnerFlowAPI.Middlewares;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add controllers + views
 builder.Services.AddControllersWithViews();
 builder.Services.AddHttpContextAccessor();
-// Add Output Cache (must be registered before building the app)
+
 builder.Services.AddOutputCache();
 
 builder.Services.AddResponseCompression(options =>
@@ -32,7 +32,6 @@ builder.Services.AddControllers().AddJsonOptions(opt =>
     opt.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 });
 
-// Register layered services
 builder.Services
     .AddPresentation()
     .AddApplication()
@@ -40,7 +39,6 @@ builder.Services
 
 var app = builder.Build();
 
-// Middleware pipeline
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -56,39 +54,29 @@ else
     app.UseHsts();
 }
 
+
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
 
-// ✅ Authentication first
 app.UseAuthentication();
 
 
 
-// ✅ Authorization next
 app.UseAuthorization();
 
-// ✅ OutputCache before Authorization
 app.UseOutputCache();
 
-// ✅ Custom middlewares like logging should come BEFORE MapControllers
 app.UseApiLogging();
 app.UseResponseCompression();
 app.UseRateLimiter();
-
-//app.MapGet("/data", async (AppDbContext db) =>
-//{
-//    var result = await db.Data.AsNoTracking().ToListAsync();
-//    return Results.Ok(result);
-//})
-//.CacheOutput("api");
+app.UseMiddleware<ResponseMiddleware>();
 
 
-// ✅ Finally, endpoint mapping
 app.MapControllers();
 
-// Optional MVC fallback route
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
