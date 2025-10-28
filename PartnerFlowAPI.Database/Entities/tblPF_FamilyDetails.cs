@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace YourNamespace.Entities
+namespace PartnerFlowAPI.Entities
 {
     [Table("tblPF_FamilyDetails")]
     public class tblPF_FamilyDetails

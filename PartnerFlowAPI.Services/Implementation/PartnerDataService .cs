@@ -12,8 +12,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using YourNamespace.Domain.Entities;
-using YourNamespace.Entities;
+using PartnerFlowAPI.Domain.Entities;
+using PartnerFlowAPI.Entities;
 
 namespace PartnerFlowAPI.Services.Implementation
 {
@@ -1321,8 +1321,7 @@ namespace PartnerFlowAPI.Services.Implementation
             {
                 result.Success = false;
                 result.InvalidFields.Add($"Exception: {ex.Message}");
-                // Optionally log the exception
-                // _logger.LogError(ex, "Error in Form60QuestionDataAsync");
+               
             }
 
             return result;
@@ -1358,13 +1357,13 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+            
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
             );
 
-            // 3️⃣ Detect if nested JSON exists
+           
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
 
             JObject dataObject = hasNestedObject
@@ -1838,7 +1837,7 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+           
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value
@@ -2499,7 +2498,7 @@ namespace PartnerFlowAPI.Services.Implementation
               ?? "Unknown";
             var invalidFields = new List<string>();
 
-            // 1️⃣ Get allowed fields for this partner
+           
             var allowedFields = await _context.PartnerSections
                 .Where(ps => ps.PartnerId == partnerId)
                 .Join(
@@ -2533,7 +2532,7 @@ namespace PartnerFlowAPI.Services.Implementation
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-            // 4️⃣ Validate each field
+           
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -2665,7 +2664,7 @@ namespace PartnerFlowAPI.Services.Implementation
 
             var fieldDict = allowedFields.ToDictionary(f => f.FieldName.ToLower(), f => f);
 
-            // 2️⃣ Normalize payload (convert any JsonElement values to normal .NET types)
+            
             var normalizedPayload = payload.ToDictionary(
                 kvp => kvp.Key,
                 kvp => kvp.Value is JsonElement je ? GetJsonElementValue(je) : kvp.Value

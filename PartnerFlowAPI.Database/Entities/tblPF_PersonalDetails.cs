@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace YourNamespace.Entities
+namespace PartnerFlowAPI.Entities
 {
     public class tblPF_PersonalDetails
     {

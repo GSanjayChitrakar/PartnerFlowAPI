@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using YourNamespace.Entities;
+using PartnerFlowAPI.Entities;
 
-namespace YourNamespace.Configurations
+namespace PartnerFlowAPI.Configurations
 {
     public class tblPF_EmploymentDetailsConfiguration : IEntityTypeConfiguration<tblPF_EmploymentDetails>
     {

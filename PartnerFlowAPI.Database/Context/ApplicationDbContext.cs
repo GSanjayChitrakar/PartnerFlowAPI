@@ -3,10 +3,10 @@ using PartnerFlowAPI.Database.Configuration;
 using PartnerFlowAPI.Database.Entities;
 using PartnerFlowAPI.Domain.Entities;
 using PartnerFlowAPI.Infrastructure.Persistence.Configurations;
-using YourNamespace.Configurations;
-using YourNamespace.Domain.Entities;
-using YourNamespace.Entities;
-using YourNamespace.Infrastructure.Persistence.Configurations;
+using PartnerFlowAPI.Configurations;
+using PartnerFlowAPI.Domain.Entities;
+using PartnerFlowAPI.Entities;
+using PartnerFlowAPI.Infrastructure.Persistence.Configurations;
 
 namespace PartnerFlowAPI.Database.Context
 {

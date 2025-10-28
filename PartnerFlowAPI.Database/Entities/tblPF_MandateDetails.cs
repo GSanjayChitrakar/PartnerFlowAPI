@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace YourNamespace.Entities
+namespace PartnerFlowAPI.Entities
 {
     public class tblPF_MandateDetails
     {

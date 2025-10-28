@@ -1,9 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using YourNamespace.Entities;
+using PartnerFlowAPI.Entities;
 using System;
 
-namespace YourNamespace.Configurations
+namespace PartnerFlowAPI.Configurations
 {
     public class tblPF_PersonalDetailsConfiguration : IEntityTypeConfiguration<tblPF_PersonalDetails>
     {

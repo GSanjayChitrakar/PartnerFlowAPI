@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace YourNamespace.Entities
+namespace PartnerFlowAPI.Entities
 {
     public class tblPF_HealthConditions
     {

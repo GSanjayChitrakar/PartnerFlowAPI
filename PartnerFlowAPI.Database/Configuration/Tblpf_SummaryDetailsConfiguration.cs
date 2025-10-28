@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using YourNamespace.Entities;
+using PartnerFlowAPI.Entities;
 
-namespace YourNamespace.Configurations
+namespace PartnerFlowAPI.Configurations
 {
     public class Tblpf_SummaryDetailsConfiguration : IEntityTypeConfiguration<Tblpf_SummaryDetails>
     {
@@ -22,32 +22,34 @@ namespace YourNamespace.Configurations
                    .HasDatabaseName("Tblpf_SummaryDetails_IsDeleted_DeletedDate");
 
             // Column Configurations
+            // NOTE: keeping the original DB column name "intSummaryDeatils" to avoid breaking existing schema/migrations.
             builder.Property(e => e.intSummaryDeatils)
                    .HasColumnName("intSummaryDeatils")
-                   .IsRequired();
+                   .IsRequired()
+                   .ValueGeneratedOnAdd();
 
             builder.Property(e => e.vcApplicationNumber)
                    .HasColumnName("vcApplicationNumber")
                    .HasMaxLength(200)
-                   .IsUnicode()
+                   .IsUnicode(false)
                    .IsRequired(false);
 
             builder.Property(e => e.vcSummary)
                    .HasColumnName("vcSummary")
                    .HasMaxLength(8000)
-                   .IsUnicode()
+                   .IsUnicode(true)
                    .IsRequired(false);
 
             builder.Property(e => e.vcLastAccessIP)
                    .HasColumnName("vcLastAccessIP")
                    .HasMaxLength(100)
-                   .IsUnicode()
+                   .IsUnicode(false)
                    .IsRequired();
 
             builder.Property(e => e.vcCreatedBy)
                    .HasColumnName("vcCreatedBy")
                    .HasMaxLength(100)
-                   .IsUnicode()
+                   .IsUnicode(false)
                    .IsRequired();
 
             builder.Property(e => e.dtCreateDate)
@@ -58,7 +60,7 @@ namespace YourNamespace.Configurations
             builder.Property(e => e.vcModifiedBy)
                    .HasColumnName("vcModifiedBy")
                    .HasMaxLength(100)
-                   .IsUnicode()
+                   .IsUnicode(false)
                    .IsRequired(false);
 
             builder.Property(e => e.dtModifiedDate)

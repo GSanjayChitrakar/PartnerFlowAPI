@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using YourNamespace.Entities;
+using PartnerFlowAPI.Entities;
 
-namespace YourNamespace.Configurations
+namespace PartnerFlowAPI.Configurations
 {
     public class tblpf_PartialWithdrawalConfiguration : IEntityTypeConfiguration<tblpf_PartialWithdrawal>
     {

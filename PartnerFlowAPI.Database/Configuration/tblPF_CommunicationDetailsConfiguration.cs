@@ -1,8 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using YourNamespace.Domain.Entities;
+using PartnerFlowAPI.Domain.Entities;
 
-namespace YourNamespace.Infrastructure.Persistence.Configurations
+namespace PartnerFlowAPI.Infrastructure.Persistence.Configurations
 {
     public class tblPF_CommunicationDetailsConfiguration : IEntityTypeConfiguration<tblPF_CommunicationDetails>
     {
