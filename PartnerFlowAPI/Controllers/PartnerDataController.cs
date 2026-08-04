@@ -49,7 +49,6 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-
         [HttpPost("SubmitAgentData")]
         public async Task<IActionResult> AgentDetailsData([FromBody] Dictionary<string, object> payload)
         {

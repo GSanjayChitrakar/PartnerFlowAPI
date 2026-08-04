@@ -3605,7 +3605,7 @@ namespace PartnerFlowAPI.Services.Implementation
                         {
                             switch (normalized)
                             {
-                                case var s when s == Normalize("PartnerSutaibility"):
+                                case var s when s == Normalize("PartnerSuitability"):
                                     res = await ProcessPartnerDataAsync(partnerId, payload, partnerName);
                                     break;
 
@@ -3696,8 +3696,11 @@ namespace PartnerFlowAPI.Services.Implementation
                                     break;
 
                                 default:
-                                    results.Add($"{section.SectionName}: Not implemented");
-                                    continue;
+                                    //results.Add($"{section.SectionName}: Not implemented");
+                                    //continue;
+                                    // Treat unimplemented sections as a hard failure so the transaction rolls back.
+                                    await transaction.RollbackAsync();
+                                    return $"❌ Section '{section.SectionName}' is not implemented"; 
                             }
 
                             if (res.Success)
