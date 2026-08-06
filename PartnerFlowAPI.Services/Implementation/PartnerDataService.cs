@@ -3116,7 +3116,7 @@ namespace PartnerFlowAPI.Services.Implementation
                         vcApplicationNumber = partnerData.ApplicationNumber,
                         intAssureType = ParseInt(GetValueIgnoreCase(dataObject, "intAssureType")) ?? 0,
                         vcTitle = GetValueIgnoreCase(dataObject, "vcTitle"),
-                        vcCompanyName = GetValueIgnoreCase(dataObject, "vcCompanyName"),
+                        //vcCompanyName = GetValueIgnoreCase(dataObject, "vcCompanyName"),
                         vcFirstName = GetValueIgnoreCase(dataObject, "vcFirstName"),
                         vcMiddleName = GetValueIgnoreCase(dataObject, "vcMiddleName"),
                         vcLastName = GetValueIgnoreCase(dataObject, "vcLastName"),
@@ -3605,7 +3605,7 @@ namespace PartnerFlowAPI.Services.Implementation
                         {
                             switch (normalized)
                             {
-                                case var s when s == Normalize("PartnerSuitability"):
+                                case var s when s == Normalize("BasicDetails"): //PartnerSuitability
                                     res = await ProcessPartnerDataAsync(partnerId, payload, partnerName);
                                     break;
 
@@ -3641,7 +3641,7 @@ namespace PartnerFlowAPI.Services.Implementation
                                     res = await Form60QuestionDataAsync(partnerId, payload, partnerName);
                                     break;
 
-                                case var s when s == Normalize("HealthCondition"):
+                                case var s when s == Normalize("HealthConditions"):
                                     res = await HealthConditionDataAsync(partnerId, payload, partnerName);
                                     break;
 
