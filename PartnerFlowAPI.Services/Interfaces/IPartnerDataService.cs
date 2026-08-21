@@ -35,6 +35,7 @@ namespace PartnerFlowAPI.Services.Interfaces
         Task<ValidationResultModel> PersonalDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName);
         Task<ValidationResultModel> ProductDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName);
         Task<ValidationResultModel> RiderDetailsDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName);
+        Task<ValidationResultModel> UploadDocumentAsync(int partnerId, Dictionary<string, object> payload, string partnerName);
         Task<string> SubmitDataAsync(int partnerId, Dictionary<string, object> payload);
     }
 }

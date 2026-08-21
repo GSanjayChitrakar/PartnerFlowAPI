@@ -21,8 +21,8 @@ namespace PartnerFlowAPI.Controllers
             _partnerDataService = partnerDataService;
         }
 
-        [HttpPost("SubmitData")]
-        public async Task<IActionResult> ProcessPartnerData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Basic")]
+        public async Task<IActionResult> ProcessPartner([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -49,8 +49,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitAgentData")]
-        public async Task<IActionResult> AgentDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Agent")]
+        public async Task<IActionResult> AgentDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -76,8 +76,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitBankAccountData")]
-        public async Task<IActionResult> BankAccountData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("BankAccount")]
+        public async Task<IActionResult> BankAccount([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -103,8 +103,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitCommunicationDetailsData")]
-        public async Task<IActionResult> CommunicationDetailstData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Communication")]
+        public async Task<IActionResult> CommunicationDetailst([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -130,8 +130,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitEmploymentDetailsData")]
-        public async Task<IActionResult> EmploymentDetailstData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Employment")]
+        public async Task<IActionResult> EmploymentDetailst([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -157,8 +157,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitFamilyDetailsData")]
-        public async Task<IActionResult> FamilyDetailstData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Family")]
+        public async Task<IActionResult> FamilyDetailst([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -184,8 +184,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitFATCAData")]
-        public async Task<IActionResult> FATCADetailstData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("FATCA")]
+        public async Task<IActionResult> FATCADetailst([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -211,8 +211,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitFinancialQuestionsData")]
-        public async Task<IActionResult> FinancialQuestionData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("FinancialQuestions")]
+        public async Task<IActionResult> FinancialQuestion([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -238,8 +238,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitForm60QuestionData")]
-        public async Task<IActionResult> Form60QuestionData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Form60Question")]
+        public async Task<IActionResult> Form60Question([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -265,8 +265,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitHealthConditionData")]
-        public async Task<IActionResult> HealthConditionData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("HealthCondition")]
+        public async Task<IActionResult> HealthCondition([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -292,8 +292,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitHealthConditionDetailsData")]
-        public async Task<IActionResult> HealthConditionDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("HealthCondition")]
+        public async Task<IActionResult> HealthConditionDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -319,8 +319,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitInsuranceHistoryData")]
-        public async Task<IActionResult> InsuranceHistoryData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("InsuranceHistory")]
+        public async Task<IActionResult> InsuranceHistory([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -346,8 +346,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitLifeStyleData")]
-        public async Task<IActionResult> LifeStyleDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("LifeStyle")]
+        public async Task<IActionResult> LifeStyleDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -373,8 +373,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitMandateData")]
-        public async Task<IActionResult> MandateDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Mandate")]
+        public async Task<IActionResult> MandateDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -400,8 +400,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitMinorData")]
-        public async Task<IActionResult> MinorDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Minor")]
+        public async Task<IActionResult> MinorDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -427,8 +427,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitNomineeData")]
-        public async Task<IActionResult> NomineeDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Nominee")]
+        public async Task<IActionResult> NomineeDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -454,8 +454,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitNRIData")]
-        public async Task<IActionResult> NRIDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("NRI")]
+        public async Task<IActionResult> NRIDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -481,8 +481,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitOtherInsuranceData")]
-        public async Task<IActionResult> OtherInsuranceData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("OtherInsurance")]
+        public async Task<IActionResult> OtherInsurance([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -508,8 +508,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitPartialWithdrawlData")]
-        public async Task<IActionResult> PartialWithdrawalData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("PartialWithdrawl")]
+        public async Task<IActionResult> PartialWithdrawal([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -535,8 +535,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitPaymentDetailsData")]
-        public async Task<IActionResult> PaymentDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Payment")]
+        public async Task<IActionResult> PaymentDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -561,8 +561,8 @@ namespace PartnerFlowAPI.Controllers
                 return StatusCode(500, new { Status = "Error", Message = ex.Message });
             }
         }
-        [HttpPost("SubmitPersonalDetailsData")]
-        public async Task<IActionResult> PersonalDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Personal")]
+        public async Task<IActionResult> PersonalDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -589,8 +589,8 @@ namespace PartnerFlowAPI.Controllers
         }
 
 
-        [HttpPost("SubmitProductDetailsData")]
-        public async Task<IActionResult> ProductDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Product")]
+        public async Task<IActionResult> ProductDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -616,8 +616,8 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("SubmitRiderDetailsData")]
-        public async Task<IActionResult> RiderDetailsData([FromBody] Dictionary<string, object> payload)
+        [HttpPost("Rider")]
+        public async Task<IActionResult> RiderDetails([FromBody] Dictionary<string, object> payload)
         {
             try
             {
@@ -643,9 +643,35 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
+        [HttpPost("UploadDocument")]
+        public async Task<IActionResult> UploadDocument([FromBody] Dictionary<string, object> payload)
+        {
+            try
+            {
 
-        [HttpPost("SubmitAllData")]
-        public async Task<IActionResult> SubmitData([FromBody] Dictionary<string, object> payload)
+                int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
+                string partnerName = User.FindFirst("PartnerName")?.Value ?? "system";
+                var result = await _partnerDataService.UploadDocumentAsync(partnerId, payload, partnerName);
+
+                if (result.InvalidFields.Any())
+                {
+                    return BadRequest(new
+                    {
+                        Status = "Validation Failed",
+                        InvalidFields = result.InvalidFields
+                    });
+                }
+
+                return Ok(new { Status = "Success", Message = "Data inserted successfully." });
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { Status = "Error", Message = ex.Message });
+            }
+        }
+
+        [HttpPost("SubmitAll")]
+        public async Task<IActionResult> Submit([FromBody] Dictionary<string, object> payload)
         {
             int partnerId = Convert.ToInt32(User.FindFirst("PartnerId")?.Value ?? "0");
 

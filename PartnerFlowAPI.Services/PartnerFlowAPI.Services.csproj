@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="fgli-ds-sharedlibrary" Version="1.0.0.21" />
+    <PackageReference Include="MediatR" Version="14.2.0" />
+    <PackageReference Include="MediatR.Contracts" Version="2.0.1" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.0" />
     <PackageReference Include="Microsoft.Data.SqlClient" Version="6.1.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
@@ -20,6 +24,10 @@
   <ItemGroup>
     <ProjectReference Include="..\PartnerFlowAPI.Models\PartnerFlowAPI.Models.csproj" />
     <ProjectReference Include="..\PartnerFlowAPI.Database\PartnerFlowAPI.Database.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Features\DocumentRequired\" />
   </ItemGroup>
 
 </Project>

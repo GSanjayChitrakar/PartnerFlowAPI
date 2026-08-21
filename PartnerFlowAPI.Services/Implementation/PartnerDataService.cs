@@ -1,19 +1,25 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Azure.Core;
+using FGLI_SharedLibrary.Abstractions;
+using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json.Linq;
 using PartnerFlowAPI.Database.Context;
 using PartnerFlowAPI.Database.Entities;
 using PartnerFlowAPI.Domain.Entities;
+using PartnerFlowAPI.Domain.Entities;
+using PartnerFlowAPI.Entities;
 using PartnerFlowAPI.Models.Dtos;
+using PartnerFlowAPI.Services.Common;
 using PartnerFlowAPI.Services.Interfaces;
+using ProposalFromService.Application.Features.DocumentRequired.Command;
+using ProposalFromService.Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
-using PartnerFlowAPI.Domain.Entities;
-using PartnerFlowAPI.Entities;
 
 namespace PartnerFlowAPI.Services.Implementation
 {
@@ -22,6 +28,10 @@ namespace PartnerFlowAPI.Services.Implementation
         private readonly ApplicationDbContext _context;
         private readonly IConfiguration _configuration;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IDateTimeService _dateTimeService;
+        private readonly IFileValidationService _fileValidationService;
+        private readonly IRemoteServices _remoteServices;
+        private readonly IMediator _mediator;
 
         public PartnerDataService(ApplicationDbContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
         {
@@ -788,9 +798,9 @@ namespace PartnerFlowAPI.Services.Implementation
                 result.Success = invalidFields.Count == 0;
 
                 var partnerData = await _context.tblPartnerDatas
-                    .Where(p => p.PartnerID == partnerId && !p.IsDeleted)
-                    .Select(p => new { p.ApplicationNumber })
-                    .FirstOrDefaultAsync();
+                                    .Where(p => p.PartnerID == partnerId && !p.IsDeleted)
+                                    .Select(p => new { p.ApplicationNumber })
+                                    .FirstOrDefaultAsync();
 
                 if (partnerData == null || string.IsNullOrEmpty(partnerData.ApplicationNumber))
                 {
@@ -856,15 +866,29 @@ namespace PartnerFlowAPI.Services.Implementation
                     catch (Exception ex)
                     {
                         result.Success = false;
-                        result.InvalidFields.Add($"❌ Error processing field: {currentField} → {ex.Message}");
-                        return result;
+                        result.InvalidFields.Add("Database Save Error");
+
+                        // Log the real cause to console or your logger
+                        Console.WriteLine("❌ Error saving FamilyDetails entity:");
+                        Console.WriteLine("Message: " + ex.Message);
+                        if (ex.InnerException != null)
+                            Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
+
+                        // Optionally: capture details in result for debugging
+                        result.ErrorMessage = ex.InnerException?.Message ?? ex.Message;
                     }
                 }
             }
             catch (Exception ex)
             {
                 result.Success = false;
-                result.InvalidFields.Add($"❌ General Error: {ex.Message}");
+                result.InvalidFields.Add("Unexpected Error");
+                result.ErrorMessage = ex.InnerException?.Message ?? ex.Message;
+
+                Console.WriteLine("❌ Top-level error in FamilyDetailstDataAsync:");
+                Console.WriteLine("Message: " + ex.Message);
+                if (ex.InnerException != null)
+                    Console.WriteLine("Inner Exception: " + ex.InnerException.Message);
             }
 
             return result;
@@ -1864,7 +1888,6 @@ namespace PartnerFlowAPI.Services.Implementation
 
                 var field = fieldDict[key];
 
-
                 if (!IsValidDataType(value, field.DataType))
                 {
                     invalidFields.Add($"{prop.Name} (Invalid DataType: Expected {field.DataType})");
@@ -2216,7 +2239,6 @@ namespace PartnerFlowAPI.Services.Implementation
 
 
             bool hasNestedObject = normalizedPayload.Values.Any(v => v is JObject || v is Dictionary<string, object>);
-
             JObject dataObject = hasNestedObject
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
@@ -2416,7 +2438,7 @@ namespace PartnerFlowAPI.Services.Implementation
                         entity.vcRelation = GetValueIgnoreCase(dataObject, "vcRelation");
                         entity.vcApplicationNumber = partnerData.ApplicationNumber;
                         entity.vcTitle = GetValueIgnoreCase(dataObject, "vcTitle");
-                        entity.vcFirstName = GetValueIgnoreCase(dataObject, "vcFirstName") ?? string.Empty;
+                        entity.vcFirstName = GetValueIgnoreCase(dataObject, "vcFirstName");
                         entity.vcMiddleName = GetValueIgnoreCase(dataObject, "vcMiddleName");
                         entity.vcLastName = GetValueIgnoreCase(dataObject, "vcLastName");
                         entity.dtDOB = ParseDate(GetValueIgnoreCase(dataObject, "dtDOB"));
@@ -2532,7 +2554,7 @@ namespace PartnerFlowAPI.Services.Implementation
                 ? FlattenJson(JObject.FromObject(normalizedPayload))
                 : JObject.FromObject(normalizedPayload);
 
-           
+
             foreach (var prop in dataObject.Properties())
             {
                 var key = prop.Name.ToLower();
@@ -2627,6 +2649,8 @@ namespace PartnerFlowAPI.Services.Implementation
                     vcLastAccessIP = clientIp,
                     vcCreatedBy = partnerName ?? "system",
                     dtCreateDate = DateTime.Now,
+                    dtModifiedDate = null,
+                    dtDeletedDate = null,
                     bitIsDeleted = ParseBool(GetValueIgnoreCase(dataObject, "bitIsDeleted")) ?? false
                 };
                 _context.tblPF_NRIDetails.Add(entity);
@@ -3252,6 +3276,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     continue;
                 }
 
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -3298,6 +3323,8 @@ namespace PartnerFlowAPI.Services.Implementation
 
                         intPT = ParseInt(GetValueIgnoreCase(dataObject, "intPT")) ?? 0,
                         intPPT = ParseInt(GetValueIgnoreCase(dataObject, "intPPT")) ?? 0,
+                        //intMinPremium = ParseInt(GetValueIgnoreCase(dataObject, "intMinPremium")) ?? 0,
+                        //intMaxPremium = ParseInt(GetValueIgnoreCase(dataObject, "intMaxPremium")) ?? 0,
 
                         vcMode = GetValueIgnoreCase(dataObject, "vcMode"),
                         vcSourceChannel = GetValueIgnoreCase(dataObject, "vcSourceChannel"),
@@ -3460,6 +3487,7 @@ namespace PartnerFlowAPI.Services.Implementation
                     continue;
                 }
 
+
                 if (field.Length.HasValue && value?.Length > field.Length)
                 {
                     invalidFields.Add($"{prop.Name} (Length Exceeded: Max {field.Length})");
@@ -3501,6 +3529,9 @@ namespace PartnerFlowAPI.Services.Implementation
                         dcTax = ParseDecimal(GetValueIgnoreCase(dataObject, "dcTax")),
                         intPT = ParseInt(GetValueIgnoreCase(dataObject, "intPT")) ?? 0,
                         intPPT = ParseInt(GetValueIgnoreCase(dataObject, "intPPT")) ?? 0,
+                        //intMinPremium = ParseInt(GetValueIgnoreCase(dataObject, "intMinPremium")) ?? 0,
+                        //intMaxPremium = ParseInt(GetValueIgnoreCase(dataObject, "intMaxPremium")) ?? 0,
+
                         vcMode = GetValueIgnoreCase(dataObject, "vcMode"),
                         vcUIN = GetValueIgnoreCase(dataObject, "vcUIN"),
                         vcReturnOfPremium = GetValueIgnoreCase(dataObject, "vcReturnOfPremium"),
@@ -3539,6 +3570,113 @@ namespace PartnerFlowAPI.Services.Implementation
                 }
             }
 
+            return result;
+        }
+
+        public async Task<ValidationResultModel> UploadDocumentAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
+        {
+            string res = string.Empty;
+
+            #region[If any file is found to be malicious, stop processing all]
+            foreach (var data in payload)
+            {
+                UploadDocumentRequest item = data.Value as UploadDocumentRequest ?? new UploadDocumentRequest();
+
+                var FileScanResult = await _fileValidationService.ValidateAsync(item.FileData, item.FileName);
+                if (!FileScanResult.IsValid)
+                {
+                    ValidationResultModel result1 = new ValidationResultModel
+                    {
+                        Success = false,
+                        InvalidFields = { FileScanResult.ErrorMessage }
+                    };
+                    return result1;
+                }
+            }
+            #endregion
+
+            foreach (var data in payload)
+            {
+                UploadDocumentRequest item = data.Value as UploadDocumentRequest ?? new UploadDocumentRequest();
+
+                string filename = CommonFunctions.GetValidFileName(_dateTimeService.Now, item.ApplicationNumber, item.FileName);
+                //  string[] splitfilename = filename.Split(".");
+                //  filename = splitfilename[0];
+
+                string extenstion = Path.GetExtension(filename).TrimStart('.');
+                string folderPath = item.ApplicationNumber;
+                // string bolbfileName = CommonFunctions.GetValidFileName(_dateTimeService.Now,item.ApplicationNumber,$"{filename}.{extenstion}");
+                string blobName = $"{folderPath}/UserUpload/{filename}";
+
+                if (item.UWrequirementID.HasValue)
+                {
+                    filename = CommonFunctions.GetUWValidFileName(_dateTimeService.Now, item.ApplicationNumber, item.FileName, item.UWfollowupcode);
+                    blobName = $"{folderPath}/UserUpload/UW/{filename}";
+                }
+
+
+                string blobpath = string.Empty;
+                string dmspath = string.Empty;
+                if (!string.IsNullOrEmpty(item.FileData))
+                {
+                    //upload to blob
+                    blobpath = await _remoteServices.UploadBlobAsync(blobName, SharedFunction.GetMemoryStreamFromBase64String(item.FileData));
+                    ////upload to dms
+                    //dmspath = await _remoteServices.PushToBlobStorage(item.FileData, item.ApplicationNumber, blobName, blobtoken!);
+                }
+                else
+                {
+                    blobpath = CommonFunctions.ExtractBaseUrl(item.FileUrl!);
+                    dmspath = item.DmsUrl!;
+                }
+
+                if (item.RowId == 1)
+                {
+                    res = await _mediator.Send(new UpdateUploadedDocumentsCommand
+                    {
+                        AssureType = item.AssureType,
+                        ApplicationNumber = item.ApplicationNumber,
+                        DMSURL = dmspath,
+                        BlobURL = blobpath,
+                        FileName = filename,
+                        FileType = extenstion,
+                        DocumentTypeId = item.DocumentTypeId,
+                        SubTypeId = item.SubTypeId,
+                        Comment = item.DocumentComment,
+                        IsResubmited = item.IsResubmited,
+                        RowId = item.RowId,
+                        UWFollowupCode = item.UWfollowupcode,
+                        UWRequirementID = item.UWrequirementID,
+                        IsForEditApp = item.IsForEditApp
+                    });
+                }
+                else
+                {
+                    res = await _mediator.Send(new AddUploadedDocumentsCommand
+                    {
+                        AssureType = item.AssureType,
+                        ApplicationNumber = item.ApplicationNumber,
+                        DMSURL = dmspath,
+                        BlobURL = blobpath,
+                        FileName = filename,
+                        FileType = extenstion,
+                        DocumentTypeId = item.DocumentTypeId,
+                        SubTypeId = item.SubTypeId,
+                        Comment = item.DocumentComment,
+                        IsResubmited = item.IsResubmited,
+                        RowId = item.RowId,
+                        UWFollowupCode = item.UWfollowupcode,
+                        UWRequirementID = item.UWrequirementID,
+                        IsForEditApp = item.IsForEditApp
+                    });
+                }
+            }
+
+            ValidationResultModel result = new ValidationResultModel
+            {
+                Success = false,
+                InvalidFields = { res }
+            };
             return result;
         }
 
@@ -3755,11 +3893,6 @@ namespace PartnerFlowAPI.Services.Implementation
             });
         }
 
-
-
-
-
-
         private object GetJsonElementValue(JsonElement element)
         {
             return element.ValueKind switch
@@ -3902,5 +4035,7 @@ namespace PartnerFlowAPI.Services.Implementation
                 .FirstOrDefault(p => string.Equals(p.Name, propertyName, StringComparison.OrdinalIgnoreCase));
             return prop?.Value?.ToString();
         }
+
+        
     }
 }

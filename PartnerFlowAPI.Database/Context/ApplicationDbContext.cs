@@ -19,6 +19,7 @@ namespace PartnerFlowAPI.Database.Context
 
         
         public DbSet<MST_PFA_Partner> Partners { get; set; }
+        public DbSet<MST_PFA_PartnerDocument> PartnerDocuments { get; set; }
         public DbSet<ApiLog> ApiLogs { get; set; }
         public DbSet<MST_PFA_PartnerSection> PartnerSections { get; set; }
         public DbSet<MST_PFA_Section> Sections { get; set; }
