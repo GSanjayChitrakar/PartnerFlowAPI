@@ -6,13 +6,10 @@ using System.Threading.Tasks;
 
 namespace PartnerFlowAPI.Database.Enums
 {
-    public enum AssureType
+    public enum ApplicationJourneyType
     {
-        LA = 1,
-        Proposer = 2,
-        Payer,
-        Nominee,
-        Appointee
-
+        OLD_Flow = 0,
+        BimaAsba_Flow_Phase_One,
+        BimaAsba_Flow_Phase_Two,
     }
 }

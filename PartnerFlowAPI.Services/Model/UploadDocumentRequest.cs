@@ -1,4 +1,4 @@
-﻿using ProposalFormService.Domain.Enums;
+﻿using PartnerFlowAPI.Database.Enums;
 
 namespace ProposalFromService.Application.Model
 {

@@ -1,11 +1,12 @@
 ﻿using FGLI_SharedLibrary.Core.Common.ApplicationExceptions;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ProposalFormService.Domain.Entities.Document;
-using ProposalFormService.Domain.Enums;
-using ProposalFromService.Application.Configuration.Data;
+using PartnerFlowAPI.Database.Context;
+using PartnerFlowAPI.Database.Entities;
+using PartnerFlowAPI.Database.Enums;
 
-namespace ProposalFromService.Application.Features.DocumentRequired.Command
+
+namespace PartnerFlowAPI.Services.Features.DocumentRequired.Command
 {
     public class AddUploadedDocumentsCommand : IRequest<string>
     {
@@ -25,9 +26,9 @@ namespace ProposalFromService.Application.Features.DocumentRequired.Command
         public bool? IsForEditApp { get; set; }
         public class AddUploadedDocumentsCommandHandler : IRequestHandler<AddUploadedDocumentsCommand, string>
         {
-            private readonly IApplicationDbContext _context;
+            private readonly ApplicationDbContext _context;
 
-            public AddUploadedDocumentsCommandHandler(IApplicationDbContext context)
+            public AddUploadedDocumentsCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }
@@ -62,13 +63,13 @@ namespace ProposalFromService.Application.Features.DocumentRequired.Command
                     entity.vcUWFollowupCode = request.UWFollowupCode;
                 }
 
-                _context.AppTblPF_DocumentRequired.Add(entity);
+                _context.appTblPF_DocumentRequireds.Add(entity);
                 await _context.SaveChangesAsync(cancellationToken);
                 return "Document added.";
             }
             private async Task Validate(AddUploadedDocumentsCommand request)
             {
-                bool IsDocumentExistWithApplication = await _context.AppTblPF_DocumentRequired
+                bool IsDocumentExistWithApplication = await _context.appTblPF_DocumentRequireds
                                                                       .AnyAsync(c => c.VcApplicationNumber == request.ApplicationNumber);
 
                 if (!IsDocumentExistWithApplication) throw new ApiException("No pending documents found");

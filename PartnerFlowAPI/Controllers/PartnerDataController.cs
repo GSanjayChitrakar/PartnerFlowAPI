@@ -292,7 +292,7 @@ namespace PartnerFlowAPI.Controllers
             }
         }
 
-        [HttpPost("HealthCondition")]
+        [HttpPost("HealthConditionDetail")]
         public async Task<IActionResult> HealthConditionDetails([FromBody] Dictionary<string, object> payload)
         {
             try

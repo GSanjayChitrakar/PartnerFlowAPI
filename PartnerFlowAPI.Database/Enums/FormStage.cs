@@ -1,0 +1,35 @@
+﻿namespace PartnerFlowAPI.Database.Enums
+{
+    public enum FormStage
+    {
+        CKYC = 0,
+        PersonalDetails,
+        CommunicationDetails,
+        FamilyDetails,
+        NomineeDetails,
+        Questionnaire = 5,
+        Summary,
+        Payment,
+        UploadDetails,
+        SCR,
+        HealthDetails = 10,
+        LifeStyleDetails,
+        Other_LA,
+        Other_Proposer,
+        FATCA,
+        Form60_LA = 15,
+        Form60_Proposer,
+        Form60_Payor,
+        Bank_Details_Payor,
+        Dedupe,
+        Receipting,
+        ImageQC,
+        DocQC,
+        MinorLifeQuestionnaire,
+        FinancialQuestionnaire,
+        SystematicPartialWithdrawal,
+        Form97_LA = 26,
+        Form97_Proposer,
+        Form97_Payor,
+    }
+}

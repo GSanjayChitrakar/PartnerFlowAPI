@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace ProposalFromService.Application.Features.DocumentRequired.Model
+namespace PartnerFlowAPI.Services.Features.DocumentRequired.Model
 {
     public class DocumentModel
     {

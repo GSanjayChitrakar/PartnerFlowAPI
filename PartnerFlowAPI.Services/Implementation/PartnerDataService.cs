@@ -1,5 +1,6 @@
 ﻿using Azure.Core;
 using FGLI_SharedLibrary.Abstractions;
+using FGLI_SharedLibrary.Core.Common.Utilities;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
@@ -8,18 +9,19 @@ using Newtonsoft.Json.Linq;
 using PartnerFlowAPI.Database.Context;
 using PartnerFlowAPI.Database.Entities;
 using PartnerFlowAPI.Domain.Entities;
-using PartnerFlowAPI.Domain.Entities;
+
 using PartnerFlowAPI.Entities;
 using PartnerFlowAPI.Models.Dtos;
 using PartnerFlowAPI.Services.Common;
+using PartnerFlowAPI.Services.Features.DocumentRequired.Command;
 using PartnerFlowAPI.Services.Interfaces;
-using ProposalFromService.Application.Features.DocumentRequired.Command;
 using ProposalFromService.Application.Model;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json;
 using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace PartnerFlowAPI.Services.Implementation
 {
@@ -33,11 +35,15 @@ namespace PartnerFlowAPI.Services.Implementation
         private readonly IRemoteServices _remoteServices;
         private readonly IMediator _mediator;
 
-        public PartnerDataService(ApplicationDbContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor)
+        public PartnerDataService(ApplicationDbContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IDateTimeService dateTimeService, IFileValidationService fileValidationService, IRemoteServices remoteServices, IMediator mediator)
         {
             _context = context;
             _configuration = configuration;
             _httpContextAccessor = httpContextAccessor;
+            _dateTimeService = dateTimeService;
+            _fileValidationService = fileValidationService;
+            _remoteServices = remoteServices;
+            _mediator = mediator;
         }
 
         public async Task<ValidationResultModel> ProcessPartnerDataAsync(int partnerId, Dictionary<string, object> payload, string partnerName)
@@ -3577,27 +3583,73 @@ namespace PartnerFlowAPI.Services.Implementation
         {
             string res = string.Empty;
 
-            #region[If any file is found to be malicious, stop processing all]
-            foreach (var data in payload)
+            var result = new ValidationResultModel
             {
-                UploadDocumentRequest item = data.Value as UploadDocumentRequest ?? new UploadDocumentRequest();
+                Success = true,
+                InvalidFields = new List<string>()
+            };
 
-                var FileScanResult = await _fileValidationService.ValidateAsync(item.FileData, item.FileName);
-                if (!FileScanResult.IsValid)
+            if (payload == null || payload.Count == 0)
+            {
+                result.Success = false;
+                result.InvalidFields.Add("Payload is empty.");
+                return result;
+            }
+
+            // helper: map various runtime payload shapes to UploadDocumentRequest
+            UploadDocumentRequest? ToRequest(object? value)
+            {
+                if (value == null) return null;
+                if (value is UploadDocumentRequest ur) return ur;
+                if (value is JObject jo) return jo.ToObject<UploadDocumentRequest>();
+                if (value is JsonElement je)
+                    return System.Text.Json.JsonSerializer.Deserialize<UploadDocumentRequest>(je.GetRawText());
+                try
                 {
-                    ValidationResultModel result1 = new ValidationResultModel
-                    {
-                        Success = false,
-                        InvalidFields = { FileScanResult.ErrorMessage }
-                    };
-                    return result1;
+                    var json = Newtonsoft.Json.JsonConvert.SerializeObject(value);
+                    return Newtonsoft.Json.JsonConvert.DeserializeObject<UploadDocumentRequest>(json);
+                }
+                catch
+                {
+                    return null;
                 }
             }
-            #endregion
+
+            // 1) Validate all files first (fail-fast on malicious)
+            foreach (var kv in payload)
+            {
+                var item = ToRequest(kv.Value);
+                if (item == null)
+                {
+                    result.Success = false;
+                    result.InvalidFields.Add($"Invalid document payload for key '{kv.Key}'.");
+                    return result;
+                }
+
+                if (!string.IsNullOrWhiteSpace(item.FileData))
+                {
+                    var scan = await _fileValidationService.ValidateAsync(item.FileData, item.FileName);
+                    if (!scan.IsValid)
+                    {
+                        result.Success = false;
+                        result.InvalidFields.Add(scan.ErrorMessage ?? "File validation failed.");
+                        return result;
+                    }
+                }
+            }
 
             foreach (var data in payload)
             {
-                UploadDocumentRequest item = data.Value as UploadDocumentRequest ?? new UploadDocumentRequest();
+                UploadDocumentRequest item = ToRequest(data.Value);
+
+                if (item == null)
+                {
+                    result.Success = false;
+                    result.InvalidFields.Add($"Invalid document payload for key '{data.Key}'.");
+                    return result;
+                }
+
+                //UploadDocumentRequest item = data.Value as UploadDocumentRequest ?? new UploadDocumentRequest();
 
                 string filename = CommonFunctions.GetValidFileName(_dateTimeService.Now, item.ApplicationNumber, item.FileName);
                 //  string[] splitfilename = filename.Split(".");
@@ -3670,14 +3722,19 @@ namespace PartnerFlowAPI.Services.Implementation
                         IsForEditApp = item.IsForEditApp
                     });
                 }
+
+                if (!string.IsNullOrEmpty(res))
+                {
+                    result.Success = false;
+                    result.InvalidFields.Add(res);
+                    return result;
+                }
             }
 
-            ValidationResultModel result = new ValidationResultModel
-            {
-                Success = false,
-                InvalidFields = { res }
-            };
+            result.Success = true;
+            
             return result;
+
         }
 
         public async Task<string> SubmitDataAsync(int partnerId, Dictionary<string, object> payload)

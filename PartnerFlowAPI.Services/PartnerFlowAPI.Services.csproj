@@ -28,6 +28,7 @@
 
   <ItemGroup>
     <Folder Include="Features\DocumentRequired\" />
+    <Folder Include="Features\DocumentRequired\Query\" />
   </ItemGroup>
 
 </Project>

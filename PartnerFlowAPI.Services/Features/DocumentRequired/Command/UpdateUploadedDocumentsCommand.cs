@@ -2,11 +2,11 @@
 using FGLI_SharedLibrary.Core.Common.Utilities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using ProposalFormService.Domain.Entities.Document;
-using ProposalFormService.Domain.Enums;
-using ProposalFromService.Application.Configuration.Data;
+using PartnerFlowAPI.Database.Context;
+using PartnerFlowAPI.Database.Enums;
+using PartnerFlowAPI.Database.Entities;
 
-namespace ProposalFromService.Application.Features.DocumentRequired.Command
+namespace PartnerFlowAPI.Services.Features.DocumentRequired.Command
 {
     public class UpdateUploadedDocumentsCommand : IRequest<string>
     {
@@ -26,9 +26,9 @@ namespace ProposalFromService.Application.Features.DocumentRequired.Command
         public bool? IsForEditApp { get; set; }
         public class UpdateUploadedDocumentsCommandHandler : IRequestHandler<UpdateUploadedDocumentsCommand, string>
         {
-            private readonly IApplicationDbContext _context;
+            private readonly ApplicationDbContext _context;
             string returnMessage = string.Empty;
-            public UpdateUploadedDocumentsCommandHandler(IApplicationDbContext context)
+            public UpdateUploadedDocumentsCommandHandler(ApplicationDbContext context)
             {
                 _context = context;
             }
@@ -36,7 +36,7 @@ namespace ProposalFromService.Application.Features.DocumentRequired.Command
             public async Task<string> Handle(UpdateUploadedDocumentsCommand request, CancellationToken cancellationToken)
             {
                 // await Validate(request);
-                var query = _context.AppTblPF_DocumentRequired.AsQueryable();
+                var query = _context.appTblPF_DocumentRequireds.AsQueryable();
 
                 // Common conditions
                 query = query.Where(c =>
@@ -106,7 +106,7 @@ namespace ProposalFromService.Application.Features.DocumentRequired.Command
                         entity.vcUWFollowupCode = request.UWFollowupCode;
                     }
 
-                    _context.AppTblPF_DocumentRequired.Add(entity);
+                    _context.appTblPF_DocumentRequireds.Add(entity);
                     returnMessage = "Document Added";
                 }
 
@@ -116,7 +116,7 @@ namespace ProposalFromService.Application.Features.DocumentRequired.Command
 
             private async Task Validate(UpdateUploadedDocumentsCommand request)
             {
-                bool IsDocumentExistWithApplication = await _context.AppTblPF_DocumentRequired
+                bool IsDocumentExistWithApplication = await _context.appTblPF_DocumentRequireds
                                                                       .AnyAsync(c => c.VcApplicationNumber == request.ApplicationNumber);
 
                 if (!IsDocumentExistWithApplication) throw new ApiException("No pending documents found");

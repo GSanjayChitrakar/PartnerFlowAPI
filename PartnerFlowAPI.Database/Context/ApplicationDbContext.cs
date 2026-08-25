@@ -51,6 +51,10 @@ namespace PartnerFlowAPI.Database.Context
         public DbSet<Tblpf_SummaryDetails> tblpf_SummaryDetails { get; set; }
         public DbSet<tblPF_ProductDetails> productDetails { get; set; }
         public DbSet<tblPF_RiderDetails> riderDetails { get; set; }
+
+        public DbSet<AppDocumentType>  appDocumentTypes { get; set; }
+        public DbSet<AppTblPF_DocumentRequired> appTblPF_DocumentRequireds { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -87,6 +91,9 @@ namespace PartnerFlowAPI.Database.Context
             modelBuilder.ApplyConfiguration(new Tblpf_SummaryDetailsConfiguration());
             modelBuilder.ApplyConfiguration(new ProductDetailsConfiguration());
             modelBuilder.ApplyConfiguration(new tblPF_RiderDetailsConfiguration());
+            modelBuilder.ApplyConfiguration(new AppTblPF_DocumentRequiredConfiguration());
+            modelBuilder.ApplyConfiguration(new AppDocumentTypeConfiguration());
+
         }
     }
 }

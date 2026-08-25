@@ -1,7 +1,10 @@
-﻿using Microsoft.AspNetCore.RateLimiting;
+﻿using FGLI_SharedLibrary.Infrastructure.AzureQueue;
+using FGLI_SharedLibrary.Infrastructure.Configuration;
+using Microsoft.AspNetCore.RateLimiting;
 using PartnerFlowAPI.Api;
 using PartnerFlowAPI.Api.Middleware;
 using PartnerFlowAPI.Middlewares;
+using PartnerFlowAPI.Services.Configuration;
 using System.Net;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -41,6 +44,7 @@ builder.Services.AddRateLimiter(options =>
             }));
 });
 
+builder.Services.Configure<FileValidationOptions>(builder.Configuration.GetSection("FileValidation"));
 
 
 builder.Services

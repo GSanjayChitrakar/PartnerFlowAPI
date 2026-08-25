@@ -1,11 +1,20 @@
+using FGLI_SharedLibrary.Abstractions;
+using FGLI_SharedLibrary.Core.Models.Configuration;
+using FGLI_SharedLibrary.Infrastructure.AzureQueue;
+using FGLI_SharedLibrary.Infrastructure.Configuration;
+using FGLI_SharedLibrary.Infrastructure.LocalServices;
+using FGLI_SharedLibrary.Infrastructure.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
-using PartnerFlowAPI.Services.Interfaces;
-using PartnerFlowAPI.Services.Implementation;
+using PartnerFlowAPI.Api.Middleware;
 using PartnerFlowAPI.Database.Context;
+using PartnerFlowAPI.Database.Entities;
+using PartnerFlowAPI.Services.Configuration;
+using PartnerFlowAPI.Services.Implementation;
+using PartnerFlowAPI.Services.Interfaces;
+using System.Text;
 
 
 namespace PartnerFlowAPI.Api
@@ -18,12 +27,33 @@ namespace PartnerFlowAPI.Api
             return services;
         }
 
+        public static IServiceCollection AddApplicationConfigurations(this IServiceCollection services, IConfigurationService configurationService)
+        {
+            services.Configure<AzureOptions>(configurationService.GetConfigurationSection("AzureQueue"));
+            services.Configure<AzureOptions>(configurationService.GetConfigurationSection("AzureQueue"));
+            services.Configure<BlobStorageSetttings>(configurationService.GetConfigurationSection("BlobStorageSetttings"));
+            //services.Configure<AppSetting>(configurationService.GetConfigurationSection("AppSetting"));
+            //services.Configure<FileValidationOptions>(configurationService.GetConfigurationSection("FileValidation"));
+
+
+
+            return services;
+        }
         private static IServiceCollection AddApplicationServices(this IServiceCollection services)
         {
             // Register Partner Auth Service
             services.AddScoped<IPartnerAuthService, PartnerAuthService>();
             services.AddScoped<IPartnerDataService, PartnerDataService>();
             services.AddScoped<IFieldService, FieldService>();
+
+            // Register additional required application services
+            services.AddScoped<IFileValidationService, FileValidationService>();
+            services.AddScoped<IDateTimeService, DateTimeService>();
+            services.AddScoped<IRemoteServices, RemoteServices>();
+            services.AddScoped<ILoggerService, LoggingService>();
+
+            // Register MediatR handlers/controllers from the application assembly
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(PartnerDataService).Assembly));
 
             return services;
         }
